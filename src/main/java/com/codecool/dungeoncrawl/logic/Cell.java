@@ -1,11 +1,14 @@
 package com.codecool.dungeoncrawl.logic;
 
 import com.codecool.dungeoncrawl.logic.actors.Actor;
+import com.codecool.dungeoncrawl.logic.items.Item;
 
 public class Cell implements Drawable {
     private CellType type;
     private Actor actor;
     private GameMap gameMap;
+    private Item item;
+
     private int x, y;
 
     Cell(GameMap gameMap, int x, int y, CellType type) {
@@ -27,6 +30,8 @@ public class Cell implements Drawable {
         this.actor = actor;
     }
 
+    public void setItem(Item item) { this.item = item; }
+
     public Actor getActor() {
         return actor;
     }
@@ -34,6 +39,8 @@ public class Cell implements Drawable {
     public Cell getNeighbor(int dx, int dy) {
         return gameMap.getCell(x + dx, y + dy);
     }
+
+    public Item getItem(Item item) { return item; }
 
     @Override
     public String getTileName() {
@@ -47,4 +54,5 @@ public class Cell implements Drawable {
     public int getY() {
         return y;
     }
+
 }
