@@ -56,6 +56,14 @@ public class Player extends Actor {
                 nextCell.getActor().getCell().setActor(null);
 
             }
+        } else if (nextCell.getActor() instanceof Soldier) {
+            this.setHealth(((Soldier) nextCell.getActor()).getDamage());
+            nextCell.getActor().setHealth(damage);
+            if (nextCell.getActor().getHealth() <= 0) {
+                nextCell.getActor().getCell().setType(CellType.FLOOR);
+                nextCell.getActor().getCell().setActor(null);
+
+            }
         }
     }
 

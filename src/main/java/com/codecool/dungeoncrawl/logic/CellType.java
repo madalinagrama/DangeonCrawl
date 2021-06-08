@@ -12,7 +12,8 @@ public enum CellType {
     SKELETON("skeleton"),
     GHOST("ghost"),
     PLAYER("player"),
-    POTION("potion");
+    POTION("potion"),
+    SOLDIER("soldier");
 
     private final String tileName;
 

@@ -105,7 +105,7 @@ public class Main extends Application {
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
-                if (map.getGhosts() != null) {
+                if (map.getGhosts() != null && map.getSoldiers() != null) {
                     map.getGhosts().forEach(g -> {
                         if (g.getX() > map.getPlayer().getX()) {
                             g.move(-1, 0);
@@ -121,6 +121,23 @@ public class Main extends Application {
                         }
                         if (g.getHealth() <= 0) {
                             map.getGhosts().remove(g);
+                        }
+                    });
+                    map.getSoldiers().forEach(s -> {
+                        if (s.getX() > map.getPlayer().getX()) {
+                            s.move(-1, 0);
+                        }
+                        if (s.getX() < map.getPlayer().getX()) {
+                            s.move(1, 0);
+                        }
+                        if (s.getY() > map.getPlayer().getY()) {
+                            s.move(0, -1);
+                        }
+                        if (s.getY() < map.getPlayer().getY()) {
+                            s.move(0, 1);
+                        }
+                        if (s.getHealth() <= 0) {
+                            map.getSoldiers().remove(s);
                         }
                     });
                 }
@@ -145,6 +162,23 @@ public class Main extends Application {
                         map.getGhosts().remove(g);
                     }
                 });
+                map.getSoldiers().forEach(s -> {
+                    if (s.getX() > map.getPlayer().getX()) {
+                        s.move(-1, 0);
+                    }
+                    if (s.getX() < map.getPlayer().getX()) {
+                        s.move(1, 0);
+                    }
+                    if (s.getY() > map.getPlayer().getY()) {
+                        s.move(0, -1);
+                    }
+                    if (s.getY() < map.getPlayer().getY()) {
+                        s.move(0, 1);
+                    }
+                    if (s.getHealth() <= 0) {
+                        map.getSoldiers().remove(s);
+                    }
+                });
                 refresh();
                 break;
             case LEFT:
@@ -166,6 +200,23 @@ public class Main extends Application {
                         map.getGhosts().remove(g);
                     }
                 });
+                map.getSoldiers().forEach(s -> {
+                    if (s.getX() > map.getPlayer().getX()) {
+                        s.move(-1, 0);
+                    }
+                    if (s.getX() < map.getPlayer().getX()) {
+                        s.move(1, 0);
+                    }
+                    if (s.getY() > map.getPlayer().getY()) {
+                        s.move(0, -1);
+                    }
+                    if (s.getY() < map.getPlayer().getY()) {
+                        s.move(0, 1);
+                    }
+                    if (s.getHealth() <= 0) {
+                        map.getSoldiers().remove(s);
+                    }
+                });
                 refresh();
                 break;
             case RIGHT:
@@ -185,6 +236,23 @@ public class Main extends Application {
                     }
                     if (g.getHealth() <= 0) {
                         map.getGhosts().remove(g);
+                    }
+                });
+                map.getSoldiers().forEach(s -> {
+                    if (s.getX() > map.getPlayer().getX()) {
+                        s.move(-1, 0);
+                    }
+                    if (s.getX() < map.getPlayer().getX()) {
+                        s.move(1, 0);
+                    }
+                    if (s.getY() > map.getPlayer().getY()) {
+                        s.move(0, -1);
+                    }
+                    if (s.getY() < map.getPlayer().getY()) {
+                        s.move(0, 1);
+                    }
+                    if (s.getHealth() <= 0) {
+                        map.getSoldiers().remove(s);
                     }
                 });
                 refresh();
