@@ -7,7 +7,8 @@ import com.codecool.dungeoncrawl.logic.Inventory;
 
 public abstract class Actor implements Drawable {
     private Cell cell;
-    private int health = 10;
+    protected int health = 10;
+    protected int damage;
 
 
     public Actor(Cell cell) {
@@ -26,8 +27,15 @@ public abstract class Actor implements Drawable {
         return health;
     }
 
+    public abstract void setHealth(int damage);
+
+
     public Cell getCell() {
         return cell;
+    }
+
+    public void setCell(Cell cell) {
+        this.cell = cell;
     }
 
     public int getX() {
@@ -37,4 +45,14 @@ public abstract class Actor implements Drawable {
     public int getY() {
         return cell.getY();
     }
+
+
+//    public void setX(int x) {
+//        this.cell.setX(x);
+//    }
+//    public void setY(int y) {
+//        this.cell.setY(y);
+//        cell.
+//    }
+
 }

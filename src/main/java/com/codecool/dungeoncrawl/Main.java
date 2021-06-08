@@ -46,18 +46,23 @@ public class Main extends Application {
         ui.add(inventoryLabel,1,15);
 
         addItem.setOnAction(e -> {
-            Inventory inventory = map.getPlayer().getInventory();
-            Item item = map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getItem();
-            System.out.println(item);
-            inventory.addItem(inventory.getInventory(),item, item.getTileName(),1);
-            System.out.println(inventory.getInventory());
-            if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() == CellType.SWORD) {
-                map.getPlayer().setDamage();
-                map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setType(CellType.FLOOR);
+            if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() != CellType.FLOOR) {
+                Inventory inventory = map.getPlayer().getInventory();
+                Item item = map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getItem();
+                System.out.println(item);
+                inventory.addItem(inventory.getInventory(),item, item.getTileName(),1);
+                System.out.println(inventory.getInventory());
+                if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() == CellType.SWORD) {
+                    map.getPlayer().setDamage();
+                    map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setType(CellType.FLOOR);
+                    map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setItem(null);
+                }
+                if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() == CellType.KEY) {
+                    map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setType(CellType.FLOOR);
+                    map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setItem(null);
+                }
             }
-            if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() == CellType.KEY) {
-                map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setType(CellType.FLOOR);
-            }
+
 
         });
 
@@ -100,8 +105,18 @@ public class Main extends Application {
         if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() == CellType.OPENDOOR) {
             Player player = map.getPlayer();
             map = MapLoader.loadMap2("/map2.txt", player);
-
+            Cell cell = new Cell(map,44,28,CellType.FLOOR);
+            player.setCell(cell);
+            map.setPlayer(player);
+        } else if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() == CellType.BACKDOOR) {
+            Player player = map.getPlayer();
+            map = MapLoader.loadMap("/map.txt");
+            Cell cell = new Cell(map,20,19,CellType.FLOOR);
+            player.setCell(cell);
+            map.setPlayer(player);
         }
+
+
     }
 
 

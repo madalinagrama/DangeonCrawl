@@ -7,14 +7,13 @@ import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.logic.items.Sword;
 
 public class Player extends Actor {
-    int damage;
     private Inventory inventory;
 
     public Player(Cell cell) {
         super(cell);
-        this.damage = 5;
         this.inventory = new Inventory();
-    }
+        this.damage = 5;
+   }
 
     public void setDamage() {
         this.damage += 5;
@@ -32,15 +31,36 @@ public class Player extends Actor {
         return "player";
     }
 
+
     @Override
     public void move(int dx, int dy) {
         Cell nextCell = getCell().getNeighbor(dx, dy);
         if ((nextCell.getType() != CellType.WALL) && (nextCell.getType() != CellType.CLOSEDOOR) && (nextCell.getActor() == null)) {
-            super.move(dx,dy);
-        }else if (nextCell.getType()==CellType.CLOSEDOOR && inventory.getInventory().containsKey("key")) {
+            super.move(dx, dy);
+        } else if (nextCell.getType() == CellType.CLOSEDOOR && inventory.getInventory().containsKey("key")) {
             System.out.println("open");
             nextCell.setType(CellType.OPENDOOR);
-            super.move(dx,dy);
+            super.move(dx, dy);
+        } else if (nextCell.getActor() instanceof Skeleton) {
+            this.setHealth(((Skeleton) nextCell.getActor()).getDamage());
+            nextCell.getActor().setHealth(damage);
+            if (nextCell.getActor().getHealth() <= 0) {
+                nextCell.getActor().getCell().setType(CellType.FLOOR);
+                nextCell.getActor().getCell().setActor(null);
+            }
+        } else if (nextCell.getActor() instanceof Ghost) {
+            this.setHealth(((Ghost) nextCell.getActor()).getDamage());
+            nextCell.getActor().setHealth(damage);
+            if (nextCell.getActor().getHealth() <= 0) {
+                nextCell.getActor().getCell().setType(CellType.FLOOR);
+                nextCell.getActor().getCell().setActor(null);
+            }
         }
     }
+
+    @Override
+    public void setHealth(int damage) {
+        this.health -= damage;
+    }
+
 }
