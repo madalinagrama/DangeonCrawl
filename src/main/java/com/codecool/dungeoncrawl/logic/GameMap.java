@@ -1,6 +1,11 @@
 package com.codecool.dungeoncrawl.logic;
 
+import com.codecool.dungeoncrawl.logic.actors.Actor;
+import com.codecool.dungeoncrawl.logic.actors.Ghost;
 import com.codecool.dungeoncrawl.logic.actors.Player;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameMap {
     private int width;
@@ -8,6 +13,8 @@ public class GameMap {
     private Cell[][] cells;
 
     private Player player;
+    private List<Ghost> ghosts = new ArrayList<Ghost>();
+
 
     public GameMap(int width, int height, CellType defaultCellType) {
         this.width = width;
@@ -28,6 +35,7 @@ public class GameMap {
         this.player = player;
     }
 
+
     public Player getPlayer() {
         return player;
     }
@@ -38,5 +46,9 @@ public class GameMap {
 
     public int getHeight() {
         return height;
+    }
+
+    public List<Ghost> getGhosts() {
+        return ghosts;
     }
 }

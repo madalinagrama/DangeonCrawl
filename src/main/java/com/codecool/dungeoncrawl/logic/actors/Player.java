@@ -16,7 +16,7 @@ public class Player extends Actor {
    }
 
     public void setDamage() {
-        this.damage += 5;
+        this.damage += 6;
     }
 
     public int getDamage() {
@@ -35,7 +35,7 @@ public class Player extends Actor {
     @Override
     public void move(int dx, int dy) {
         Cell nextCell = getCell().getNeighbor(dx, dy);
-        if ((nextCell.getType() != CellType.WALL) && (nextCell.getType() != CellType.CLOSEDOOR) && (nextCell.getActor() == null)) {
+        if ((nextCell.getType() != CellType.WALL) && (nextCell.getType() != CellType.CLOSEDOOR) && (nextCell.getActor() == null) && (nextCell.getType() != CellType.GHOST)) {
             super.move(dx, dy);
         } else if (nextCell.getType() == CellType.CLOSEDOOR && inventory.getInventory().containsKey("key")) {
             System.out.println("open");
@@ -54,6 +54,7 @@ public class Player extends Actor {
             if (nextCell.getActor().getHealth() <= 0) {
                 nextCell.getActor().getCell().setType(CellType.FLOOR);
                 nextCell.getActor().getCell().setActor(null);
+
             }
         }
     }
@@ -61,6 +62,10 @@ public class Player extends Actor {
     @Override
     public void setHealth(int damage) {
         this.health -= damage;
+    }
+
+    public void setHealthUp(int points) {
+        this.health += points;
     }
 
 }

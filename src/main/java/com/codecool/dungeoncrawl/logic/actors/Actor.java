@@ -6,7 +6,7 @@ import com.codecool.dungeoncrawl.logic.Drawable;
 import com.codecool.dungeoncrawl.logic.Inventory;
 
 public abstract class Actor implements Drawable {
-    private Cell cell;
+    protected Cell cell;
     protected int health = 10;
     protected int damage;
 

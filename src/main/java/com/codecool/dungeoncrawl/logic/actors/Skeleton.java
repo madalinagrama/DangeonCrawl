@@ -6,7 +6,7 @@ public class Skeleton extends Actor {
 
     public Skeleton(Cell cell) {
         super(cell);
-        this.damage = 2;
+        this.damage = 1;
     }
 
     @Override

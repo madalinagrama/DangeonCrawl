@@ -3,8 +3,12 @@ package com.codecool.dungeoncrawl;
 import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.items.Item;
+import javafx.animation.Animation;
+import javafx.animation.RotateTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
+import javafx.scene.PerspectiveCamera;
+import javafx.scene.PointLight;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -14,7 +18,9 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
+import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 public class Main extends Application {
     GameMap map = MapLoader.loadMap("/map.txt");
@@ -49,7 +55,6 @@ public class Main extends Application {
             if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() != CellType.FLOOR) {
                 Inventory inventory = map.getPlayer().getInventory();
                 Item item = map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getItem();
-                System.out.println(item);
                 inventory.addItem(inventory.getInventory(),item, item.getTileName(),1);
                 System.out.println(inventory.getInventory());
                 if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() == CellType.SWORD) {
@@ -61,6 +66,12 @@ public class Main extends Application {
                     map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setType(CellType.FLOOR);
                     map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setItem(null);
                 }
+                if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() == CellType.POTION) {
+                    map.getPlayer().setHealthUp(5);
+                    map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setType(CellType.FLOOR);
+                    map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setItem(null);
+                }
+
             }
 
 
@@ -74,6 +85,14 @@ public class Main extends Application {
 
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
+//        PerspectiveCamera camera = new PerspectiveCamera(true);
+//        camera.setTranslateX(300);
+//        camera.setTranslateY(0);
+//        camera.setTranslateZ(-1500);
+//        camera.setNearClip(0.1);
+//        camera.setFarClip(2000);
+//        camera.setFieldOfView(35);
+//        scene.setCamera(camera);
         refresh();
         scene.addEventFilter(KeyEvent.KEY_PRESSED,this::onKeyPressed);
 
@@ -86,18 +105,88 @@ public class Main extends Application {
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
+                if (map.getGhosts() != null) {
+                    map.getGhosts().forEach(g -> {
+                        if (g.getX() > map.getPlayer().getX()) {
+                            g.move(-1, 0);
+                        }
+                        if (g.getX() < map.getPlayer().getX()) {
+                            g.move(1, 0);
+                        }
+                        if (g.getY() > map.getPlayer().getY()) {
+                            g.move(0, -1);
+                        }
+                        if (g.getY() < map.getPlayer().getY()) {
+                            g.move(0, 1);
+                        }
+                        if (g.getHealth() <= 0) {
+                            map.getGhosts().remove(g);
+                        }
+                    });
+                }
                 refresh();
                 break;
             case DOWN:
                 map.getPlayer().move(0, 1);
+                map.getGhosts().forEach(g -> {
+                    if (g.getX() > map.getPlayer().getX()) {
+                        g.move(-1, 0);
+                    }
+                    if (g.getX() < map.getPlayer().getX()) {
+                        g.move(1, 0);
+                    }
+                    if (g.getY() > map.getPlayer().getY()) {
+                        g.move(0, -1);
+                    }
+                    if (g.getY() < map.getPlayer().getY()) {
+                        g.move(0, 1);
+                    }
+                    if (g.getHealth() <= 0) {
+                        map.getGhosts().remove(g);
+                    }
+                });
                 refresh();
                 break;
             case LEFT:
                 map.getPlayer().move(-1, 0);
+                map.getGhosts().forEach(g -> {
+                    if (g.getX() > map.getPlayer().getX()) {
+                        g.move(-1, 0);
+                    }
+                    if (g.getX() < map.getPlayer().getX()) {
+                        g.move(1, 0);
+                    }
+                    if (g.getY() > map.getPlayer().getY()) {
+                        g.move(0, -1);
+                    }
+                    if (g.getY() < map.getPlayer().getY()) {
+                        g.move(0, 1);
+                    }
+                    if (g.getHealth() <= 0) {
+                        map.getGhosts().remove(g);
+                    }
+                });
                 refresh();
                 break;
             case RIGHT:
                 map.getPlayer().move(1,0);
+                map.getGhosts().forEach(g -> {
+                    if (g.getX() > map.getPlayer().getX()) {
+                        g.move(-1, 0);
+                    }
+                    if (g.getX() < map.getPlayer().getX()) {
+                        g.move(1, 0);
+                    }
+                    if (g.getY() > map.getPlayer().getY()) {
+                        g.move(0, -1);
+                    }
+                    if (g.getY() < map.getPlayer().getY()) {
+                        g.move(0, 1);
+                    }
+                    if (g.getHealth() <= 0) {
+                        map.getGhosts().remove(g);
+                    }
+                });
                 refresh();
                 break;
         }
@@ -105,9 +194,12 @@ public class Main extends Application {
         if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() == CellType.OPENDOOR) {
             Player player = map.getPlayer();
             map = MapLoader.loadMap2("/map2.txt", player);
-            Cell cell = new Cell(map,44,28,CellType.FLOOR);
+            Cell cell = new Cell(map,21,0,CellType.FLOOR);
             player.setCell(cell);
             map.setPlayer(player);
+            canvas = new Canvas(
+                    200 * Tiles.TILE_WIDTH,
+                    200 * Tiles.TILE_WIDTH);
         } else if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() == CellType.BACKDOOR) {
             Player player = map.getPlayer();
             map = MapLoader.loadMap("/map.txt");
