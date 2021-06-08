@@ -40,7 +40,7 @@ public class Cell implements Drawable {
         return gameMap.getCell(x + dx, y + dy);
     }
 
-    public Item getItem(Item item) { return item; }
+    public Item getItem() { return item; }
 
     @Override
     public String getTileName() {

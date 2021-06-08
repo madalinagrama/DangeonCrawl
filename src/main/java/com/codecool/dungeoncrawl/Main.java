@@ -1,13 +1,13 @@
 package com.codecool.dungeoncrawl;
 
-import com.codecool.dungeoncrawl.logic.Cell;
-import com.codecool.dungeoncrawl.logic.GameMap;
-import com.codecool.dungeoncrawl.logic.MapLoader;
+import com.codecool.dungeoncrawl.logic.*;
+import com.codecool.dungeoncrawl.logic.items.Item;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -22,6 +22,8 @@ public class Main extends Application {
             map.getHeight() * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
+    Label DamageLabel = new Label();
+    Button addItem = new Button("Add Item");
 
     public static void main(String[] args) {
         launch(args);
@@ -35,6 +37,20 @@ public class Main extends Application {
 
         ui.add(new Label("Health: "), 0, 0);
         ui.add(healthLabel, 1, 0);
+        ui.add(new Label("Damage: "), 0, 5);
+        ui.add(DamageLabel, 1, 5);
+        ui.add(addItem,0,10);
+
+        addItem.setOnAction(e -> {
+            Inventory inventory = map.getPlayer().getInventory();
+            Item item = map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getItem();
+            System.out.println(item);
+            inventory.addItem(inventory.getInventory(),item, item.getTileName(),1);
+            System.out.println(inventory.getInventory());
+            if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() == CellType.SWORD) {
+                map.getPlayer().setDamage();
+            }
+        });
 
         BorderPane borderPane = new BorderPane();
 
@@ -44,10 +60,11 @@ public class Main extends Application {
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
         refresh();
-        scene.setOnKeyPressed(this::onKeyPressed);
+        scene.addEventFilter(KeyEvent.KEY_PRESSED,this::onKeyPressed);
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
+
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
@@ -71,6 +88,8 @@ public class Main extends Application {
         }
     }
 
+
+
     private void refresh() {
         context.setFill(Color.BLACK);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
@@ -85,5 +104,6 @@ public class Main extends Application {
             }
         }
         healthLabel.setText("" + map.getPlayer().getHealth());
+        DamageLabel.setText("" + map.getPlayer().getDamage());
     }
 }
