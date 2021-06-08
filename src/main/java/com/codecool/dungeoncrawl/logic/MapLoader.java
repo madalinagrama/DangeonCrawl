@@ -9,8 +9,8 @@ import java.io.InputStream;
 import java.util.Scanner;
 
 public class MapLoader {
-    public static GameMap loadMap() {
-        InputStream is = MapLoader.class.getResourceAsStream("/map.txt");
+    public static GameMap loadMap(String maps) {
+        InputStream is = MapLoader.class.getResourceAsStream(maps);
         Scanner scanner = new Scanner(is);
         int width = scanner.nextInt();
         int height = scanner.nextInt();
@@ -52,9 +52,64 @@ public class MapLoader {
                         case 'd' :
                             cell.setType(CellType.CLOSEDOOR);
                             break;
-                        case 'o' :
-                            cell.setType(CellType.OPENDOOR);
+//                        case 'o' :
+//                            cell.setType(CellType.OPENDOOR);
+//                            break;
+                        default:
+                            throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
+                    }
+                }
+            }
+        }
+        return map;
+    }
+
+    public static GameMap loadMap2(String maps, Player player) {
+        InputStream ls = MapLoader.class.getResourceAsStream(maps);
+        Scanner scanner = new Scanner(ls);
+        int width = scanner.nextInt();
+        int height = scanner.nextInt();
+
+        scanner.nextLine(); // empty line
+
+        GameMap map = new GameMap(width, height, CellType.EMPTY);
+        for (int y = 0; y < height; y++) {
+            String line = scanner.nextLine();
+            for (int x = 0; x < width; x++) {
+                if (x < line.length()) {
+                    Cell cell = map.getCell(x, y);
+                    switch (line.charAt(x)) {
+                        case ' ':
+                            cell.setType(CellType.EMPTY);
                             break;
+                        case '#':
+                            cell.setType(CellType.WALL);
+                            break;
+                        case '.':
+                            cell.setType(CellType.FLOOR);
+                            break;
+                        case 's':
+                            cell.setType(CellType.FLOOR);
+                            new Skeleton(cell);
+                            break;
+                        case '@':
+                            cell.setType(CellType.FLOOR);
+                            map.setPlayer(player);
+                            break;
+                        case 'w':
+                            cell.setType(CellType.SWORD);
+                            new Sword(cell);
+                            break;
+                        case 'k':
+                            cell.setType(CellType.KEY);
+                            new Key(cell);
+                            break;
+                        case 'd' :
+                            cell.setType(CellType.CLOSEDOOR);
+                            break;
+//                        case 'o' :
+//                            cell.setType(CellType.OPENDOOR);
+//                            break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
                     }

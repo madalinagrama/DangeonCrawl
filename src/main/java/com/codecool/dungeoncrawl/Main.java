@@ -1,6 +1,7 @@
 package com.codecool.dungeoncrawl;
 
 import com.codecool.dungeoncrawl.logic.*;
+import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -16,13 +17,14 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
 public class Main extends Application {
-    GameMap map = MapLoader.loadMap();
+    GameMap map = MapLoader.loadMap("/map.txt");
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
             map.getHeight() * Tiles.TILE_WIDTH);
     GraphicsContext context = canvas.getGraphicsContext2D();
     Label healthLabel = new Label();
     Label DamageLabel = new Label();
+    Label inventoryLabel = new Label();
     Button addItem = new Button("Add Item");
 
     public static void main(String[] args) {
@@ -40,6 +42,8 @@ public class Main extends Application {
         ui.add(new Label("Damage: "), 0, 5);
         ui.add(DamageLabel, 1, 5);
         ui.add(addItem,0,10);
+        ui.add(new Label("Inventory: "), 0, 15);
+        ui.add(inventoryLabel,1,15);
 
         addItem.setOnAction(e -> {
             Inventory inventory = map.getPlayer().getInventory();
@@ -49,8 +53,14 @@ public class Main extends Application {
             System.out.println(inventory.getInventory());
             if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() == CellType.SWORD) {
                 map.getPlayer().setDamage();
+                map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setType(CellType.FLOOR);
             }
+            if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() == CellType.KEY) {
+                map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setType(CellType.FLOOR);
+            }
+
         });
+
 
         BorderPane borderPane = new BorderPane();
 
@@ -86,6 +96,12 @@ public class Main extends Application {
                 refresh();
                 break;
         }
+
+        if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() == CellType.OPENDOOR) {
+            Player player = map.getPlayer();
+            map = MapLoader.loadMap2("/map2.txt", player);
+
+        }
     }
 
 
@@ -105,5 +121,6 @@ public class Main extends Application {
         }
         healthLabel.setText("" + map.getPlayer().getHealth());
         DamageLabel.setText("" + map.getPlayer().getDamage());
+        inventoryLabel.setText("" + map.getPlayer().getInventory().getInventory());
     }
 }
