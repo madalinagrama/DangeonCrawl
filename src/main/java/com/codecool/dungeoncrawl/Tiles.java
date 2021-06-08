@@ -36,6 +36,9 @@ public class Tiles {
         tileMap.put("ghost", new Tile(27, 6));
         tileMap.put("potion", new Tile(18, 25));
         tileMap.put("soldier", new Tile(29, 0));
+        tileMap.put("portal", new Tile(1, 9));
+        tileMap.put("bossDoor", new Tile(6, 10));
+        tileMap.put("hammer", new Tile(5, 29));
 
     }
 

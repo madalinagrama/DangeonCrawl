@@ -71,6 +71,10 @@ public class Main extends Application {
                     map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setType(CellType.FLOOR);
                     map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setItem(null);
                 }
+                if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() == CellType.HAMMER) {
+                    map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setType(CellType.FLOOR);
+                    map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setItem(null);
+                }
 
             }
 
