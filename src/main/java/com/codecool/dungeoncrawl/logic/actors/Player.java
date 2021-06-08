@@ -8,6 +8,7 @@ import com.codecool.dungeoncrawl.logic.items.Sword;
 
 public class Player extends Actor {
     private Inventory inventory;
+    private int armor = 0;
 
     public Player(Cell cell) {
         super(cell);
@@ -31,6 +32,13 @@ public class Player extends Actor {
         return "player";
     }
 
+    public int getArmor() {
+        return armor;
+    }
+
+    public void setArmor(int armor) {
+        this.armor += armor;
+    }
 
     @Override
     public void move(int dx, int dy) {
@@ -64,7 +72,13 @@ public class Player extends Actor {
             if (nextCell.getActor().getHealth() <= 0) {
                 nextCell.getActor().getCell().setType(CellType.FLOOR);
                 nextCell.getActor().getCell().setActor(null);
-
+            }
+        } else if (nextCell.getActor() instanceof Boss) {
+            this.setHealth(((Boss) nextCell.getActor()).getDamage()-armor);
+            nextCell.getActor().setHealth(damage);
+            if (nextCell.getActor().getHealth() <= 0) {
+                nextCell.getActor().getCell().setType(CellType.FLOOR);
+                nextCell.getActor().getCell().setActor(null);
             }
         }
     }

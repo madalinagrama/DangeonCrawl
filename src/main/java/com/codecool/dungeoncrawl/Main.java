@@ -31,6 +31,7 @@ public class Main extends Application {
     Label healthLabel = new Label();
     Label DamageLabel = new Label();
     Label inventoryLabel = new Label();
+    Label armorLabel = new Label();
     Button addItem = new Button("Add Item");
 
     public static void main(String[] args) {
@@ -47,9 +48,11 @@ public class Main extends Application {
         ui.add(healthLabel, 1, 0);
         ui.add(new Label("Damage: "), 0, 5);
         ui.add(DamageLabel, 1, 5);
-        ui.add(addItem,0,10);
-        ui.add(new Label("Inventory: "), 0, 15);
-        ui.add(inventoryLabel,1,15);
+        ui.add(new Label("Armor: "), 0, 10);
+        ui.add(armorLabel, 1, 10);
+        ui.add(addItem,0,15);
+        ui.add(new Label("Inventory: "), 0, 20);
+        ui.add(inventoryLabel,1,20);
 
         addItem.setOnAction(e -> {
             if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() != CellType.FLOOR) {
@@ -72,6 +75,11 @@ public class Main extends Application {
                     map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setItem(null);
                 }
                 if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() == CellType.HAMMER) {
+                    map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setType(CellType.FLOOR);
+                    map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setItem(null);
+                }
+                if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() == CellType.ARMOR) {
+                    map.getPlayer().setArmor(2);
                     map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setType(CellType.FLOOR);
                     map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setItem(null);
                 }
@@ -300,6 +308,7 @@ public class Main extends Application {
         }
         healthLabel.setText("" + map.getPlayer().getHealth());
         DamageLabel.setText("" + map.getPlayer().getDamage());
+        armorLabel.setText("" + map.getPlayer().getArmor());
         inventoryLabel.setText("" + map.getPlayer().getInventory().getInventory());
     }
 }
