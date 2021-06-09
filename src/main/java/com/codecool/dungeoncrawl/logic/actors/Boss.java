@@ -1,6 +1,7 @@
 package com.codecool.dungeoncrawl.logic.actors;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.CellType;
 
 public class Boss extends Actor{
 
@@ -13,6 +14,15 @@ public class Boss extends Actor{
 
     public int getDamage() {
         return damage;
+    }
+
+    @Override
+    public void move(int dx, int dy) {
+        Cell nextCell = getCell().getNeighbor(dx, dy);
+        if (nextCell.getActor() == null && nextCell.getType() != CellType.WALL && nextCell.getType() != CellType.BOSSDOOR && nextCell.getType() != CellType.PORTAL) {
+            System.out.println(nextCell.getTileName());
+            super.move(dx, dy);
+        }
     }
 
     @Override

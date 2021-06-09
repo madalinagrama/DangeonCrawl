@@ -2,13 +2,11 @@ package com.codecool.dungeoncrawl;
 
 import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.logic.alerts.AlertBox;
+import com.codecool.dungeoncrawl.logic.alerts.ReplayGame;
 import com.codecool.dungeoncrawl.logic.items.Item;
-import javafx.animation.Animation;
-import javafx.animation.RotateTransition;
 import javafx.application.Application;
 import javafx.geometry.Insets;
-import javafx.scene.PerspectiveCamera;
-import javafx.scene.PointLight;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -18,9 +16,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
-import javafx.scene.transform.Rotate;
 import javafx.stage.Stage;
-import javafx.util.Duration;
 
 public class Main extends Application {
     GameMap map = MapLoader.loadMap("/map.txt");
@@ -33,6 +29,8 @@ public class Main extends Application {
     Label inventoryLabel = new Label();
     Label armorLabel = new Label();
     Button addItem = new Button("Add Item");
+    Button inventory = new Button("Inventory");
+    Button replay = new Button("Restart Game");
 
     public static void main(String[] args) {
         launch(args);
@@ -50,43 +48,46 @@ public class Main extends Application {
         ui.add(DamageLabel, 1, 5);
         ui.add(new Label("Armor: "), 0, 10);
         ui.add(armorLabel, 1, 10);
-        ui.add(addItem,0,15);
-        ui.add(new Label("Inventory: "), 0, 20);
-        ui.add(inventoryLabel,1,20);
+        ui.add(addItem, 0, 15);
+        ui.add(inventory, 5, 15);
+//        ui.add(new Label("Inventory: "), 0, 20);
+//        ui.add(inventoryLabel,1,20);
+
+        inventory.setOnAction(e -> {
+            AlertBox.display(map.getPlayer().getInventory(), "Inventory");
+        });
 
         addItem.setOnAction(e -> {
-            if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() != CellType.FLOOR) {
+            if (map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).getType() != CellType.FLOOR) {
                 Inventory inventory = map.getPlayer().getInventory();
-                Item item = map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getItem();
-                inventory.addItem(inventory.getInventory(),item, item.getTileName(),1);
+                Item item = map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).getItem();
+                inventory.addItem(inventory.getInventory(), item, item.getTileName(), 1);
                 System.out.println(inventory.getInventory());
-                if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() == CellType.SWORD) {
+                if (map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).getType() == CellType.SWORD) {
                     map.getPlayer().setDamage();
-                    map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setType(CellType.FLOOR);
-                    map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setItem(null);
+                    map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).setType(CellType.FLOOR);
+                    map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).setItem(null);
                 }
-                if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() == CellType.KEY) {
-                    map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setType(CellType.FLOOR);
-                    map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setItem(null);
+                if (map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).getType() == CellType.KEY) {
+                    map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).setType(CellType.FLOOR);
+                    map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).setItem(null);
                 }
-                if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() == CellType.POTION) {
+                if (map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).getType() == CellType.POTION) {
                     map.getPlayer().setHealthUp(5);
-                    map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setType(CellType.FLOOR);
-                    map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setItem(null);
+                    map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).setType(CellType.FLOOR);
+                    map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).setItem(null);
                 }
-                if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() == CellType.HAMMER) {
-                    map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setType(CellType.FLOOR);
-                    map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setItem(null);
+                if (map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).getType() == CellType.HAMMER) {
+                    map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).setType(CellType.FLOOR);
+                    map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).setItem(null);
                 }
-                if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() == CellType.ARMOR) {
+                if (map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).getType() == CellType.ARMOR) {
                     map.getPlayer().setArmor(2);
-                    map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setType(CellType.FLOOR);
-                    map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).setItem(null);
+                    map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).setType(CellType.FLOOR);
+                    map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).setItem(null);
                 }
 
             }
-
-
         });
 
 
@@ -97,23 +98,43 @@ public class Main extends Application {
 
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
-//        PerspectiveCamera camera = new PerspectiveCamera(true);
-//        camera.setTranslateX(300);
-//        camera.setTranslateY(0);
-//        camera.setTranslateZ(-1500);
-//        camera.setNearClip(0.1);
-//        camera.setFarClip(2000);
-//        camera.setFieldOfView(35);
-//        scene.setCamera(camera);
+
+        Cell cell = new Cell(map,6,15,CellType.FLOOR);
+        Player player = new Player(cell);
+        player.setCell(cell);
+        map.setPlayer(player);
+
         refresh();
-        scene.addEventFilter(KeyEvent.KEY_PRESSED,this::onKeyPressed);
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, this::onKeyPressed);
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
 
+//        if (map.getPlayer().getHealth() <= 0) {
+//            map.setPlayer(null);
+//            map = MapLoader.loadMap("/map.txt");
+//            Cell cell = new Cell(map,20,19,CellType.FLOOR);
+//            Player player = new Player(cell);
+//            player.setCell(cell);
+//            map.setPlayer(player);
+//    }
+
+    }
+
+    public void restart() {
+            map.setPlayer(null);
+            map = MapLoader.loadMap("/map.txt");
+            Cell cell = new Cell(map,5,14,CellType.FLOOR);
+            Player player = new Player(cell);
+            player.setCell(cell);
+            map.setPlayer(player);
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
+        if (map.getPlayer().getHealth() <= 0) {
+            ReplayGame.display("Restart","You Died", this);
+        }
+
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
@@ -157,116 +178,122 @@ public class Main extends Application {
                 break;
             case DOWN:
                 map.getPlayer().move(0, 1);
-                map.getGhosts().forEach(g -> {
-                    if (g.getX() > map.getPlayer().getX()) {
-                        g.move(-1, 0);
-                    }
-                    if (g.getX() < map.getPlayer().getX()) {
-                        g.move(1, 0);
-                    }
-                    if (g.getY() > map.getPlayer().getY()) {
-                        g.move(0, -1);
-                    }
-                    if (g.getY() < map.getPlayer().getY()) {
-                        g.move(0, 1);
-                    }
-                    if (g.getHealth() <= 0) {
-                        map.getGhosts().remove(g);
-                    }
-                });
-                map.getSoldiers().forEach(s -> {
-                    if (s.getX() > map.getPlayer().getX()) {
-                        s.move(-1, 0);
-                    }
-                    if (s.getX() < map.getPlayer().getX()) {
-                        s.move(1, 0);
-                    }
-                    if (s.getY() > map.getPlayer().getY()) {
-                        s.move(0, -1);
-                    }
-                    if (s.getY() < map.getPlayer().getY()) {
-                        s.move(0, 1);
-                    }
-                    if (s.getHealth() <= 0) {
-                        map.getSoldiers().remove(s);
-                    }
-                });
+                if (map.getGhosts() != null && map.getSoldiers() != null) {
+                    map.getGhosts().forEach(g -> {
+                        if (g.getX() > map.getPlayer().getX()) {
+                            g.move(-1, 0);
+                        }
+                        if (g.getX() < map.getPlayer().getX()) {
+                            g.move(1, 0);
+                        }
+                        if (g.getY() > map.getPlayer().getY()) {
+                            g.move(0, -1);
+                        }
+                        if (g.getY() < map.getPlayer().getY()) {
+                            g.move(0, 1);
+                        }
+                        if (g.getHealth() <= 0) {
+                            map.getGhosts().remove(g);
+                        }
+                    });
+                    map.getSoldiers().forEach(s -> {
+                        if (s.getX() > map.getPlayer().getX()) {
+                            s.move(-1, 0);
+                        }
+                        if (s.getX() < map.getPlayer().getX()) {
+                            s.move(1, 0);
+                        }
+                        if (s.getY() > map.getPlayer().getY()) {
+                            s.move(0, -1);
+                        }
+                        if (s.getY() < map.getPlayer().getY()) {
+                            s.move(0, 1);
+                        }
+                        if (s.getHealth() <= 0) {
+                            map.getSoldiers().remove(s);
+                        }
+                    });
+                }
                 refresh();
                 break;
             case LEFT:
                 map.getPlayer().move(-1, 0);
-                map.getGhosts().forEach(g -> {
-                    if (g.getX() > map.getPlayer().getX()) {
-                        g.move(-1, 0);
-                    }
-                    if (g.getX() < map.getPlayer().getX()) {
-                        g.move(1, 0);
-                    }
-                    if (g.getY() > map.getPlayer().getY()) {
-                        g.move(0, -1);
-                    }
-                    if (g.getY() < map.getPlayer().getY()) {
-                        g.move(0, 1);
-                    }
-                    if (g.getHealth() <= 0) {
-                        map.getGhosts().remove(g);
-                    }
-                });
-                map.getSoldiers().forEach(s -> {
-                    if (s.getX() > map.getPlayer().getX()) {
-                        s.move(-1, 0);
-                    }
-                    if (s.getX() < map.getPlayer().getX()) {
-                        s.move(1, 0);
-                    }
-                    if (s.getY() > map.getPlayer().getY()) {
-                        s.move(0, -1);
-                    }
-                    if (s.getY() < map.getPlayer().getY()) {
-                        s.move(0, 1);
-                    }
-                    if (s.getHealth() <= 0) {
-                        map.getSoldiers().remove(s);
-                    }
-                });
+                if (map.getGhosts() != null && map.getSoldiers() != null) {
+                    map.getGhosts().forEach(g -> {
+                        if (g.getX() > map.getPlayer().getX()) {
+                            g.move(-1, 0);
+                        }
+                        if (g.getX() < map.getPlayer().getX()) {
+                            g.move(1, 0);
+                        }
+                        if (g.getY() > map.getPlayer().getY()) {
+                            g.move(0, -1);
+                        }
+                        if (g.getY() < map.getPlayer().getY()) {
+                            g.move(0, 1);
+                        }
+                        if (g.getHealth() <= 0) {
+                            map.getGhosts().remove(g);
+                        }
+                    });
+                    map.getSoldiers().forEach(s -> {
+                        if (s.getX() > map.getPlayer().getX()) {
+                            s.move(-1, 0);
+                        }
+                        if (s.getX() < map.getPlayer().getX()) {
+                            s.move(1, 0);
+                        }
+                        if (s.getY() > map.getPlayer().getY()) {
+                            s.move(0, -1);
+                        }
+                        if (s.getY() < map.getPlayer().getY()) {
+                            s.move(0, 1);
+                        }
+                        if (s.getHealth() <= 0) {
+                            map.getSoldiers().remove(s);
+                        }
+                    });
+                }
                 refresh();
                 break;
             case RIGHT:
                 map.getPlayer().move(1,0);
-                map.getGhosts().forEach(g -> {
-                    if (g.getX() > map.getPlayer().getX()) {
-                        g.move(-1, 0);
-                    }
-                    if (g.getX() < map.getPlayer().getX()) {
-                        g.move(1, 0);
-                    }
-                    if (g.getY() > map.getPlayer().getY()) {
-                        g.move(0, -1);
-                    }
-                    if (g.getY() < map.getPlayer().getY()) {
-                        g.move(0, 1);
-                    }
-                    if (g.getHealth() <= 0) {
-                        map.getGhosts().remove(g);
-                    }
-                });
-                map.getSoldiers().forEach(s -> {
-                    if (s.getX() > map.getPlayer().getX()) {
-                        s.move(-1, 0);
-                    }
-                    if (s.getX() < map.getPlayer().getX()) {
-                        s.move(1, 0);
-                    }
-                    if (s.getY() > map.getPlayer().getY()) {
-                        s.move(0, -1);
-                    }
-                    if (s.getY() < map.getPlayer().getY()) {
-                        s.move(0, 1);
-                    }
-                    if (s.getHealth() <= 0) {
-                        map.getSoldiers().remove(s);
-                    }
-                });
+                if (map.getGhosts() != null && map.getSoldiers() != null) {
+                    map.getGhosts().forEach(g -> {
+                        if (g.getX() > map.getPlayer().getX()) {
+                            g.move(-1, 0);
+                        }
+                        if (g.getX() < map.getPlayer().getX()) {
+                            g.move(1, 0);
+                        }
+                        if (g.getY() > map.getPlayer().getY()) {
+                            g.move(0, -1);
+                        }
+                        if (g.getY() < map.getPlayer().getY()) {
+                            g.move(0, 1);
+                        }
+                        if (g.getHealth() <= 0) {
+                            map.getGhosts().remove(g);
+                        }
+                    });
+                    map.getSoldiers().forEach(s -> {
+                        if (s.getX() > map.getPlayer().getX()) {
+                            s.move(-1, 0);
+                        }
+                        if (s.getX() < map.getPlayer().getX()) {
+                            s.move(1, 0);
+                        }
+                        if (s.getY() > map.getPlayer().getY()) {
+                            s.move(0, -1);
+                        }
+                        if (s.getY() < map.getPlayer().getY()) {
+                            s.move(0, 1);
+                        }
+                        if (s.getHealth() <= 0) {
+                            map.getSoldiers().remove(s);
+                        }
+                    });
+                }
                 refresh();
                 break;
         }
@@ -274,7 +301,7 @@ public class Main extends Application {
         if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() == CellType.OPENDOOR) {
             Player player = map.getPlayer();
             map = MapLoader.loadMap2("/map2.txt", player);
-            Cell cell = new Cell(map,21,0,CellType.FLOOR);
+            Cell cell = new Cell(map,44,29,CellType.FLOOR);
             player.setCell(cell);
             map.setPlayer(player);
             canvas = new Canvas(
@@ -293,16 +320,48 @@ public class Main extends Application {
 
 
 
+
     private void refresh() {
-        context.setFill(Color.BLACK);
+        context.setFill(Color.BLUE);
         context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-        for (int x = 0; x < map.getWidth(); x++) {
-            for (int y = 0; y < map.getHeight(); y++) {
+        Player player = map.getPlayer();
+        int deltaView = 12;
+        int befX = deltaView;
+        int xAfter = deltaView;
+
+
+        if (map.getPlayer().getX() < deltaView) {
+            befX = map.getPlayer().getX();
+            xAfter = deltaView + (deltaView-befX);
+        } else if (map.getWidth() - 1 - map.getPlayer().getX() < deltaView) {
+            xAfter = map.getWidth() - 1 - map.getPlayer().getX();
+            befX = deltaView + (deltaView-xAfter);
+        }
+        deltaView = 10;
+        int befY = deltaView;
+        int yAfter = deltaView;
+        if (map.getPlayer().getY() < deltaView) {
+            befY = map.getPlayer().getY();
+            yAfter = deltaView + (deltaView-befY);
+        } else if (map.getHeight() - 1 - map.getPlayer().getY() < deltaView) {
+            yAfter = map.getHeight() - 1 - map.getPlayer().getY();
+            befY = deltaView + (deltaView-yAfter);
+        }
+
+
+        int minX = map.getPlayer().getX() - befX;
+        int minY = map.getPlayer().getY() - befY;
+        int maxX = map.getPlayer().getX() + xAfter;
+        int maxY = map.getPlayer().getY() + yAfter;
+
+
+        for (int x = minX; x<= maxX; x++) {
+            for (int y = minY; y <= maxY; y++) {
                 Cell cell = map.getCell(x, y);
                 if (cell.getActor() != null) {
-                    Tiles.drawTile(context, cell.getActor(), x, y);
+                    Tiles.drawTile(context, cell.getActor(), x-minX, y-minY);
                 } else {
-                    Tiles.drawTile(context, cell, x, y);
+                    Tiles.drawTile(context, cell, x-minX, y-minY);
                 }
             }
         }

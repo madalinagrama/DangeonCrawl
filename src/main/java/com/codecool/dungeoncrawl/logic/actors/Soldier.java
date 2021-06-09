@@ -22,7 +22,7 @@ public class Soldier extends Actor{
     @Override
     public void move(int dx, int dy) {
         Cell nextCell = getCell().getNeighbor(dx, dy);
-        if (nextCell.getActor() == null && nextCell.getType() != CellType.WALL) {
+        if (nextCell.getActor() == null && nextCell.getType() != CellType.WALL && nextCell.getType() != CellType.BOSSDOOR && nextCell.getType() != CellType.PORTAL) {
             System.out.println(nextCell.getTileName());
             super.move(dx, dy);
         }

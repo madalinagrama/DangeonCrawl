@@ -12,6 +12,8 @@ public class Player extends Actor {
 
     public Player(Cell cell) {
         super(cell);
+        cell.setX(5);
+        cell.setY(14);
         this.inventory = new Inventory();
         this.damage = 5;
    }

@@ -33,4 +33,8 @@ public class Inventory {
     public Map<String, Integer> getInventory() {
         return inventory;
     }
+
+//    public String getItems() {
+//        return inventory.keySet() + ": " + inventory.values();
+//    }
 }
