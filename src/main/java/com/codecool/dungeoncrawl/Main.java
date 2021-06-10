@@ -55,17 +55,44 @@ public class Main extends Application {
         ui.add(addItem, 0, 15);
         ui.add(inventory, 5, 15);
 
+        invetoryWindow();
+        addItemsToInventory();
 
+        BorderPane borderPane = new BorderPane();
+
+        borderPane.setCenter(canvas);
+        borderPane.setRight(ui);
+
+        Scene scene = new Scene(borderPane);
+        primaryStage.setScene(scene);
+
+        Cell cell = new Cell(map, 6, 15, CellType.FLOOR);
+        Player player = new Player(cell);
+        player.setCell(cell);
+        map.setPlayer(player);
+
+        refresh();
+        scene.addEventFilter(KeyEvent.KEY_PRESSED, this::onKeyPressed);
+
+        primaryStage.setTitle("Dungeon Crawl");
+        primaryStage.show();
+
+
+    }
+
+    public void invetoryWindow() {
         inventory.setOnAction(e -> {
             AlertBox.display(map.getPlayer().getInventory(), "Inventory");
         });
+    }
 
+    public void addItemsToInventory() {
         addItem.setOnAction(e -> {
+            addItem.requestFocus();
             if (map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).getType() != CellType.FLOOR) {
                 Inventory inventory = map.getPlayer().getInventory();
                 Item item = map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).getItem();
                 inventory.addItem(inventory.getInventory(), item, item.getTileName(), 1);
-                System.out.println(inventory.getInventory());
                 if (map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).getType() == CellType.SWORD) {
                     map.getPlayer().setDamage();
                     map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).setType(CellType.FLOOR);
@@ -92,28 +119,6 @@ public class Main extends Application {
 
             }
         });
-
-
-        BorderPane borderPane = new BorderPane();
-
-        borderPane.setCenter(canvas);
-        borderPane.setRight(ui);
-
-        Scene scene = new Scene(borderPane);
-        primaryStage.setScene(scene);
-
-        Cell cell = new Cell(map, 6, 15, CellType.FLOOR);
-        Player player = new Player(cell);
-        player.setCell(cell);
-        map.setPlayer(player);
-
-        refresh();
-        scene.addEventFilter(KeyEvent.KEY_PRESSED, this::onKeyPressed);
-
-        primaryStage.setTitle("Dungeon Crawl");
-        primaryStage.show();
-
-
     }
 
     public void restart() {
@@ -177,6 +182,7 @@ public class Main extends Application {
                     });
                 }
                 refresh();
+                keyEvent.consume();
                 break;
             case DOWN:
                 map.getPlayer().move(0, 1);
@@ -211,6 +217,7 @@ public class Main extends Application {
                     });
                 }
                 refresh();
+                keyEvent.consume();
                 break;
             case LEFT:
                 map.getPlayer().move(-1, 0);
@@ -247,6 +254,7 @@ public class Main extends Application {
                     });
                 }
                 refresh();
+                keyEvent.consume();
                 break;
             case RIGHT:
                 map.getPlayer().move(1, 0);
@@ -283,6 +291,7 @@ public class Main extends Application {
                     });
                 }
                 refresh();
+                keyEvent.consume();
                 break;
         }
 
@@ -302,7 +311,6 @@ public class Main extends Application {
             player.setCell(cell);
             map.setPlayer(player);
         }
-
 
     }
 

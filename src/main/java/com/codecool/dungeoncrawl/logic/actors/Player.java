@@ -48,7 +48,7 @@ public class Player extends Actor {
         if ((nextCell.getType() != CellType.WALL) && (nextCell.getType() != CellType.CLOSEDOOR) && (nextCell.getActor() == null) && (nextCell.getType() != CellType.GHOST) && (nextCell.getType() != CellType.BOSSDOOR)) {
             super.move(dx, dy);
         } else if (nextCell.getType() == CellType.CLOSEDOOR && inventory.getInventory().containsKey("key")) {
-            System.out.println("open");
+
             nextCell.setType(CellType.OPENDOOR);
             super.move(dx, dy);
         } else if (nextCell.getType() == CellType.BOSSDOOR && inventory.getInventory().containsKey("hammer")) {

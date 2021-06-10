@@ -24,7 +24,6 @@ public class Ghost extends Actor{
     public void move(int dx, int dy) {
         Cell nextCell = getCell().getNeighbor(dx, dy);
         if (nextCell.getActor() == null) {
-            System.out.println(nextCell.getTileName());
             super.move(dx,dy);
         }
     }
@@ -35,7 +34,7 @@ public class Ghost extends Actor{
     }
 
     public boolean isQualified() {
-        return this.health < 0;
+        return this.health <= 0;
     }
 
 }
