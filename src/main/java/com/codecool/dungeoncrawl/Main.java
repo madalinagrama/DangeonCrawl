@@ -1,9 +1,12 @@
 package com.codecool.dungeoncrawl;
 
 import com.codecool.dungeoncrawl.logic.*;
+import com.codecool.dungeoncrawl.logic.actors.Actor;
+import com.codecool.dungeoncrawl.logic.actors.Ghost;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.AlertBox;
 import com.codecool.dungeoncrawl.logic.ReplayGame;
+import com.codecool.dungeoncrawl.logic.actors.Soldier;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -17,6 +20,8 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
+
+import java.util.function.Predicate;
 
 public class Main extends Application {
     GameMap map = MapLoader.loadMap("/map.txt");
@@ -128,6 +133,16 @@ public class Main extends Application {
             ReplayGame.display("Restart", "You won!", this);
         }
 
+        Predicate<Ghost> isQualified = Ghost::isQualified;
+        map.getGhosts().stream()
+                .filter(isQualified);
+        map.getGhosts().removeIf(isQualified);
+
+        Predicate<Soldier> isQualified1 = Soldier::isQualified;
+        map.getSoldiers().stream()
+                .filter(isQualified1);
+        map.getSoldiers().removeIf(isQualified1);
+
         switch (keyEvent.getCode()) {
             case UP:
                 map.getPlayer().move(0, -1);
@@ -145,9 +160,6 @@ public class Main extends Application {
                         if (g.getY() < map.getPlayer().getY()) {
                             g.move(0, 1);
                         }
-                        if (g.getHealth() <= 0) {
-                            map.getGhosts().remove(g);
-                        }
                     });
                     map.getSoldiers().forEach(s -> {
                         if (s.getX() > map.getPlayer().getX()) {
@@ -161,9 +173,6 @@ public class Main extends Application {
                         }
                         if (s.getY() < map.getPlayer().getY()) {
                             s.move(0, 1);
-                        }
-                        if (s.getHealth() <= 0) {
-                            map.getSoldiers().remove(s);
                         }
                     });
                 }
@@ -185,9 +194,6 @@ public class Main extends Application {
                         if (g.getY() < map.getPlayer().getY()) {
                             g.move(0, 1);
                         }
-                        if (g.getHealth() <= 0) {
-                            map.getGhosts().remove(g);
-                        }
                     });
                     map.getSoldiers().forEach(s -> {
                         if (s.getX() > map.getPlayer().getX()) {
@@ -201,9 +207,6 @@ public class Main extends Application {
                         }
                         if (s.getY() < map.getPlayer().getY()) {
                             s.move(0, 1);
-                        }
-                        if (s.getHealth() <= 0) {
-                            map.getSoldiers().remove(s);
                         }
                     });
                 }
@@ -225,9 +228,7 @@ public class Main extends Application {
                         if (g.getY() < map.getPlayer().getY()) {
                             g.move(0, 1);
                         }
-                        if (g.getHealth() <= 0) {
-                            map.getGhosts().remove(g);
-                        }
+
                     });
                     map.getSoldiers().forEach(s -> {
                         if (s.getX() > map.getPlayer().getX()) {
@@ -242,9 +243,7 @@ public class Main extends Application {
                         if (s.getY() < map.getPlayer().getY()) {
                             s.move(0, 1);
                         }
-                        if (s.getHealth() <= 0) {
-                            map.getSoldiers().remove(s);
-                        }
+
                     });
                 }
                 refresh();
@@ -265,9 +264,7 @@ public class Main extends Application {
                         if (g.getY() < map.getPlayer().getY()) {
                             g.move(0, 1);
                         }
-                        if (g.getHealth() <= 0) {
-                            map.getGhosts().remove(g);
-                        }
+
                     });
                     map.getSoldiers().forEach(s -> {
                         if (s.getX() > map.getPlayer().getX()) {
@@ -282,9 +279,7 @@ public class Main extends Application {
                         if (s.getY() < map.getPlayer().getY()) {
                             s.move(0, 1);
                         }
-                        if (s.getHealth() <= 0) {
-                            map.getSoldiers().remove(s);
-                        }
+
                     });
                 }
                 refresh();

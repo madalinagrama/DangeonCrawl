@@ -28,6 +28,10 @@ public class Soldier extends Actor{
         }
     }
 
+    public boolean isQualified() {
+        return this.health < 0;
+    }
+
     @Override
     public void setHealth(int damage) {
         this.health -= damage;

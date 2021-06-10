@@ -33,4 +33,9 @@ public class Ghost extends Actor{
     public void setHealth(int damage) {
         this.health -= damage;
     }
+
+    public boolean isQualified() {
+        return this.health < 0;
+    }
+
 }
