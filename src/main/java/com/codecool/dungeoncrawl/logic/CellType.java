@@ -17,7 +17,8 @@ public enum CellType {
     PORTAL("portal"),
     BOSSDOOR("bossDoor"),
     HAMMER("hammer"),
-    ARMOR("armor");
+    ARMOR("armor"),
+    WINDOOR("winDoor");
 
     private final String tileName;
 

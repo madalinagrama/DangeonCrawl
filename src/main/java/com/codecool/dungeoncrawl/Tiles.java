@@ -41,6 +41,7 @@ public class Tiles {
         tileMap.put("hammer", new Tile(5, 29));
         tileMap.put("armor", new Tile(1, 23));
         tileMap.put("boss", new Tile(31, 0));
+        tileMap.put("winDoor", new Tile(4, 13));
 
     }
 

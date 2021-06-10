@@ -151,6 +151,9 @@ public class MapLoader {
                             cell.setType(CellType.FLOOR);
                             Boss boss = new Boss(cell);
                             break;
+                        case '*':
+                            cell.setType(CellType.WINDOOR);
+                            break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");
                     }

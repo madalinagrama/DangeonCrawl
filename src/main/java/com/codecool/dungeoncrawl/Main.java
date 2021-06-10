@@ -110,14 +110,6 @@ public class Main extends Application {
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
 
-//        if (map.getPlayer().getHealth() <= 0) {
-//            map.setPlayer(null);
-//            map = MapLoader.loadMap("/map.txt");
-//            Cell cell = new Cell(map,20,19,CellType.FLOOR);
-//            Player player = new Player(cell);
-//            player.setCell(cell);
-//            map.setPlayer(player);
-//    }
 
     }
 
@@ -133,6 +125,9 @@ public class Main extends Application {
     private void onKeyPressed(KeyEvent keyEvent) {
         if (map.getPlayer().getHealth() <= 0) {
             ReplayGame.display("Restart","You Died", this);
+        }
+        if (map.getPlayer().getCell().getType() == CellType.WINDOOR) {
+            ReplayGame.display("Restart","You won!", this);
         }
 
         switch (keyEvent.getCode()) {
