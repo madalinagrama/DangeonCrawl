@@ -149,6 +149,12 @@ public class Main extends Application {
         map.getSoldiers().removeIf(isQualified1);
 
         switch (keyEvent.getCode()) {
+
+            case SPACE:
+                if (inventory.isFocused())
+                    addItem.requestFocus();
+                break;
+
             case UP:
                 map.getPlayer().move(0, -1);
                 if (map.getGhosts() != null && map.getSoldiers() != null) {
@@ -184,6 +190,7 @@ public class Main extends Application {
                 refresh();
                 keyEvent.consume();
                 break;
+
             case DOWN:
                 map.getPlayer().move(0, 1);
                 if (map.getGhosts() != null && map.getSoldiers() != null) {
@@ -219,6 +226,7 @@ public class Main extends Application {
                 refresh();
                 keyEvent.consume();
                 break;
+
             case LEFT:
                 map.getPlayer().move(-1, 0);
                 if (map.getGhosts() != null && map.getSoldiers() != null) {
@@ -256,6 +264,7 @@ public class Main extends Application {
                 refresh();
                 keyEvent.consume();
                 break;
+
             case RIGHT:
                 map.getPlayer().move(1, 0);
                 if (map.getGhosts() != null && map.getSoldiers() != null) {

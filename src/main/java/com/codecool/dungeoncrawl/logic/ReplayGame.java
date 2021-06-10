@@ -22,8 +22,8 @@ public class ReplayGame {
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle(title);
         Label label = new Label(message);
-        label.setTranslateX(100);
-        label.setTranslateY(100);
+        label.setTranslateX(90);
+        label.setTranslateY(70);
         window.setMinWidth(250);
         window.setMinHeight(250);
 
