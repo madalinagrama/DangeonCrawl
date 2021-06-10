@@ -47,19 +47,19 @@ public class MapLoader {
                             cell.setType(CellType.KEY);
                             new Key(cell);
                             break;
-                        case 'd' :
+                        case 'd':
                             cell.setType(CellType.CLOSEDOOR);
                             break;
-                        case 'g' :
+                        case 'g':
                             cell.setType(CellType.FLOOR);
                             Ghost ghost = new Ghost(cell);
                             map.getGhosts().add(ghost);
                             break;
-                        case 'p' :
+                        case 'p':
                             cell.setType(CellType.POTION);
                             new Potion(cell);
                             break;
-                        case 'v' :
+                        case 'v':
                             cell.setType(CellType.FLOOR);
                             Soldier soldier = new Soldier(cell);
                             map.getSoldiers().add(soldier);
@@ -113,41 +113,41 @@ public class MapLoader {
                             cell.setType(CellType.KEY);
                             new Key(cell);
                             break;
-                        case 'd' :
+                        case 'd':
                             cell.setType(CellType.CLOSEDOOR);
                             break;
-                        case 'b' :
+                        case 'b':
                             cell.setType(CellType.BACKDOOR);
                             break;
-                        case 'g' :
+                        case 'g':
                             cell.setType(CellType.FLOOR);
                             Ghost ghost = new Ghost(cell);
                             map.getGhosts().add(ghost);
                             break;
-                        case 'p' :
+                        case 'p':
                             cell.setType(CellType.POTION);
                             new Potion(cell);
                             break;
-                        case 'v' :
+                        case 'v':
                             cell.setType(CellType.FLOOR);
                             Soldier soldier = new Soldier(cell);
                             map.getSoldiers().add(soldier);
                             break;
-                        case 'f' :
+                        case 'f':
                             cell.setType(CellType.PORTAL);
                             break;
-                        case 'c' :
+                        case 'c':
                             cell.setType(CellType.BOSSDOOR);
                             break;
-                        case 'l' :
+                        case 'l':
                             cell.setType(CellType.HAMMER);
                             new Hammer(cell);
                             break;
-                        case 'a' :
+                        case 'a':
                             cell.setType(CellType.ARMOR);
                             new Armor(cell);
                             break;
-                        case 'j' :
+                        case 'j':
                             cell.setType(CellType.FLOOR);
                             Boss boss = new Boss(cell);
                             break;

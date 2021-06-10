@@ -2,8 +2,8 @@ package com.codecool.dungeoncrawl;
 
 import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.logic.actors.Player;
-import com.codecool.dungeoncrawl.logic.alerts.AlertBox;
-import com.codecool.dungeoncrawl.logic.alerts.ReplayGame;
+import com.codecool.dungeoncrawl.logic.AlertBox;
+import com.codecool.dungeoncrawl.logic.ReplayGame;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import javafx.application.Application;
 import javafx.geometry.Insets;
@@ -30,7 +30,6 @@ public class Main extends Application {
     Label armorLabel = new Label();
     Button addItem = new Button("Add Item");
     Button inventory = new Button("Inventory");
-    Button replay = new Button("Restart Game");
 
     public static void main(String[] args) {
         launch(args);
@@ -50,8 +49,7 @@ public class Main extends Application {
         ui.add(armorLabel, 1, 10);
         ui.add(addItem, 0, 15);
         ui.add(inventory, 5, 15);
-//        ui.add(new Label("Inventory: "), 0, 20);
-//        ui.add(inventoryLabel,1,20);
+
 
         inventory.setOnAction(e -> {
             AlertBox.display(map.getPlayer().getInventory(), "Inventory");
@@ -99,7 +97,7 @@ public class Main extends Application {
         Scene scene = new Scene(borderPane);
         primaryStage.setScene(scene);
 
-        Cell cell = new Cell(map,6,15,CellType.FLOOR);
+        Cell cell = new Cell(map, 6, 15, CellType.FLOOR);
         Player player = new Player(cell);
         player.setCell(cell);
         map.setPlayer(player);
@@ -114,20 +112,20 @@ public class Main extends Application {
     }
 
     public void restart() {
-            map.setPlayer(null);
-            map = MapLoader.loadMap("/map.txt");
-            Cell cell = new Cell(map,5,14,CellType.FLOOR);
-            Player player = new Player(cell);
-            player.setCell(cell);
-            map.setPlayer(player);
+        map.setPlayer(null);
+        map = MapLoader.loadMap("/map.txt");
+        Cell cell = new Cell(map, 5, 14, CellType.FLOOR);
+        Player player = new Player(cell);
+        player.setCell(cell);
+        map.setPlayer(player);
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
         if (map.getPlayer().getHealth() <= 0) {
-            ReplayGame.display("Restart","You Died", this);
+            ReplayGame.display("Restart", "You Died", this);
         }
         if (map.getPlayer().getCell().getType() == CellType.WINDOOR) {
-            ReplayGame.display("Restart","You won!", this);
+            ReplayGame.display("Restart", "You won!", this);
         }
 
         switch (keyEvent.getCode()) {
@@ -252,7 +250,7 @@ public class Main extends Application {
                 refresh();
                 break;
             case RIGHT:
-                map.getPlayer().move(1,0);
+                map.getPlayer().move(1, 0);
                 if (map.getGhosts() != null && map.getSoldiers() != null) {
                     map.getGhosts().forEach(g -> {
                         if (g.getX() > map.getPlayer().getX()) {
@@ -293,27 +291,25 @@ public class Main extends Application {
                 break;
         }
 
-        if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() == CellType.OPENDOOR) {
+        if (map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).getType() == CellType.OPENDOOR) {
             Player player = map.getPlayer();
             map = MapLoader.loadMap2("/map2.txt", player);
-            Cell cell = new Cell(map,44,29,CellType.FLOOR);
+            Cell cell = new Cell(map, 44, 29, CellType.FLOOR);
             player.setCell(cell);
             map.setPlayer(player);
             canvas = new Canvas(
                     200 * Tiles.TILE_WIDTH,
                     200 * Tiles.TILE_WIDTH);
-        } else if (map.getCell(map.getPlayer().getX(),map.getPlayer().getY()).getType() == CellType.BACKDOOR) {
+        } else if (map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).getType() == CellType.BACKDOOR) {
             Player player = map.getPlayer();
             map = MapLoader.loadMap("/map.txt");
-            Cell cell = new Cell(map,20,19,CellType.FLOOR);
+            Cell cell = new Cell(map, 20, 19, CellType.FLOOR);
             player.setCell(cell);
             map.setPlayer(player);
         }
 
 
     }
-
-
 
 
     private void refresh() {
@@ -327,20 +323,20 @@ public class Main extends Application {
 
         if (map.getPlayer().getX() < deltaView) {
             befX = map.getPlayer().getX();
-            xAfter = deltaView + (deltaView-befX);
+            xAfter = deltaView + (deltaView - befX);
         } else if (map.getWidth() - 1 - map.getPlayer().getX() < deltaView) {
             xAfter = map.getWidth() - 1 - map.getPlayer().getX();
-            befX = deltaView + (deltaView-xAfter);
+            befX = deltaView + (deltaView - xAfter);
         }
         deltaView = 10;
         int befY = deltaView;
         int yAfter = deltaView;
         if (map.getPlayer().getY() < deltaView) {
             befY = map.getPlayer().getY();
-            yAfter = deltaView + (deltaView-befY);
+            yAfter = deltaView + (deltaView - befY);
         } else if (map.getHeight() - 1 - map.getPlayer().getY() < deltaView) {
             yAfter = map.getHeight() - 1 - map.getPlayer().getY();
-            befY = deltaView + (deltaView-yAfter);
+            befY = deltaView + (deltaView - yAfter);
         }
 
 
@@ -350,13 +346,13 @@ public class Main extends Application {
         int maxY = map.getPlayer().getY() + yAfter;
 
 
-        for (int x = minX; x<= maxX; x++) {
+        for (int x = minX; x <= maxX; x++) {
             for (int y = minY; y <= maxY; y++) {
                 Cell cell = map.getCell(x, y);
                 if (cell.getActor() != null) {
-                    Tiles.drawTile(context, cell.getActor(), x-minX, y-minY);
+                    Tiles.drawTile(context, cell.getActor(), x - minX, y - minY);
                 } else {
-                    Tiles.drawTile(context, cell, x-minX, y-minY);
+                    Tiles.drawTile(context, cell, x - minX, y - minY);
                 }
             }
         }

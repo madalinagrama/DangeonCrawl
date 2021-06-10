@@ -27,8 +27,6 @@ public class Ghost extends Actor{
             System.out.println(nextCell.getTileName());
             super.move(dx,dy);
         }
-
-
     }
 
     @Override

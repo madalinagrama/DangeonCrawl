@@ -1,4 +1,4 @@
-package com.codecool.dungeoncrawl.logic.alerts;
+package com.codecool.dungeoncrawl.logic;
 import com.codecool.dungeoncrawl.logic.Inventory;
 import javafx.scene.*;
 import javafx.stage.*;
@@ -37,7 +37,6 @@ public class AlertBox {
 
         closeButton.setTranslateX(100);
         closeButton.setTranslateY(150);
-//        layout.setAlignment(Pos.CENTER);
         Scene scene = new Scene(layout);
         window.setScene(scene);
         window.showAndWait();

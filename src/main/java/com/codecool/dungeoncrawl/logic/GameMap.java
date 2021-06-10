@@ -14,7 +14,6 @@ public class GameMap {
     private Player player;
     private List<Ghost> ghosts = new ArrayList<Ghost>();
     private List<Soldier> soldiers = new ArrayList<>();
-    private Boss boss;
 
 
     public GameMap(int width, int height, CellType defaultCellType) {
@@ -57,7 +56,4 @@ public class GameMap {
         return soldiers;
     }
 
-    public Boss getBoss() {
-        return boss;
-    }
 }
