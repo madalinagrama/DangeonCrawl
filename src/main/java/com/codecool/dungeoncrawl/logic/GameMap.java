@@ -35,7 +35,6 @@ public class GameMap {
         this.player = player;
     }
 
-
     public Player getPlayer() {
         return player;
     }

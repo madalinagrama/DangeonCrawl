@@ -29,6 +29,21 @@ public class Player extends Actor {
     public Inventory getInventory() {
         return inventory;
     }
+    private String name;
+
+
+    public Player(Cell cell, String name) {
+        super(cell);
+        this.name = name;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public String getTileName() {
         return "player";
