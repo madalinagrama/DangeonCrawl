@@ -91,7 +91,6 @@ public class Main extends Application {
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
 
-
     }
 
     public void invetoryWindow() {
@@ -148,13 +147,6 @@ public class Main extends Application {
         map.getSoldiers().removeIf(isQualified1);
 
         switch (keyEvent.getCode()) {
-
-//            case SPACE:
-//                if (inventory.isFocused())
-//                    addItem.requestFocus();
-//                break;
-
-
             case UP:
                 map.getPlayer().setNewDirection(0, -1);
                 update();
