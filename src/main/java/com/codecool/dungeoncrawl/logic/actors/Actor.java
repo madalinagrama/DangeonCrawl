@@ -26,6 +26,7 @@ public abstract class Actor implements Drawable {
 
     public abstract void makeMove();
 
+
     public int getHealth() {
         return health;
     }

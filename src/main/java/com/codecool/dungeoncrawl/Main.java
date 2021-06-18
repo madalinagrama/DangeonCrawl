@@ -96,12 +96,13 @@ public class Main extends Application {
     public void invetoryWindow() {
         inventory.setOnAction(e -> {
             AlertBox.display(map.getPlayer().getInventory(), "Inventory");
+            addItem.requestFocus();
         });
     }
 
     public void addItemsToInventory() {
         addItem.setOnAction(e -> {
-            addItem.requestFocus();
+
             if (map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).getType() != CellType.FLOOR) {
                 Inventory inventory = map.getPlayer().getInventory();
                 Item item = map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).getItem();
@@ -163,10 +164,11 @@ public class Main extends Application {
 
         switch (keyEvent.getCode()) {
 
-            case SPACE:
-                if (inventory.isFocused())
-                    addItem.requestFocus();
-                break;
+//            case SPACE:
+//                if (inventory.isFocused())
+//                    addItem.requestFocus();
+//                break;
+
 
             case UP:
                 map.getPlayer().setNewDirection(0, -1);
