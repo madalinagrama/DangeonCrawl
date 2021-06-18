@@ -1,8 +1,9 @@
 package com.codecool.dungeoncrawl.logic.items;
 
 import com.codecool.dungeoncrawl.logic.Cell;
+import com.codecool.dungeoncrawl.logic.actors.Player;
 
-public class Potion extends Item {
+public class Potion extends ItemWithEffect {
     public Potion(Cell cell) {
         super(cell, "potion");
     }
@@ -10,5 +11,10 @@ public class Potion extends Item {
     @Override
     public String getTileName() {
         return "potion";
+    }
+
+    @Override
+    public void applyEffect(Player player) {
+        player.setHealthUp(5);
     }
 }

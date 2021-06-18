@@ -13,6 +13,7 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.logic.items.ItemWithEffect;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -102,36 +103,20 @@ public class Main extends Application {
 
     public void addItemsToInventory() {
         addItem.setOnAction(e -> {
-
+            addItem.requestFocus();
             if (map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).getType() != CellType.FLOOR) {
                 Inventory inventory = map.getPlayer().getInventory();
                 Item item = map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).getItem();
                 inventory.addItem(inventory.getInventory(), item, item.getTileName(), 1);
-                if (map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).getType() == CellType.SWORD) {
-                    map.getPlayer().setDamage();
+                if (item != null) {
                     map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).setType(CellType.FLOOR);
                     map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).setItem(null);
+                    if (item instanceof ItemWithEffect) {
+                        ((ItemWithEffect) item).applyEffect(map.getPlayer());
+                    }
                 }
-                if (map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).getType() == CellType.KEY) {
-                    map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).setType(CellType.FLOOR);
-                    map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).setItem(null);
-                }
-                if (map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).getType() == CellType.POTION) {
-                    map.getPlayer().setHealthUp(5);
-                    map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).setType(CellType.FLOOR);
-                    map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).setItem(null);
-                }
-                if (map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).getType() == CellType.HAMMER) {
-                    map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).setType(CellType.FLOOR);
-                    map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).setItem(null);
-                }
-                if (map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).getType() == CellType.ARMOR) {
-                    map.getPlayer().setArmor(2);
-                    map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).setType(CellType.FLOOR);
-                    map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).setItem(null);
-                }
-
             }
+
         });
     }
 
