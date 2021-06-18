@@ -9,6 +9,8 @@ import com.codecool.dungeoncrawl.logic.items.Sword;
 public class Player extends Actor {
     private Inventory inventory;
     private int armor = 0;
+    private int dX;
+    private int dY;
 
     public Player(Cell cell) {
         super(cell);
@@ -59,15 +61,20 @@ public class Player extends Actor {
 
     @Override
     public void move(int dx, int dy) {
-        Cell nextCell = getCell().getNeighbor(dx, dy);
-        if ((nextCell.getType() != CellType.WALL) && (nextCell.getType() != CellType.CLOSEDOOR) && (nextCell.getActor() == null) && (nextCell.getType() != CellType.GHOST) && (nextCell.getType() != CellType.BOSSDOOR)) {
             super.move(dx, dy);
+    }
+
+    @Override
+    public void makeMove() {
+        Cell nextCell = getCell().getNeighbor(dX, dY);
+        if ((nextCell.getType() != CellType.WALL) && (nextCell.getType() != CellType.CLOSEDOOR) && (nextCell.getActor() == null) && (nextCell.getType() != CellType.GHOST) && (nextCell.getType() != CellType.BOSSDOOR)) {
+            move(dX, dY);
         } else if (nextCell.getType() == CellType.CLOSEDOOR && inventory.getInventory().containsKey("key")) {
 
             nextCell.setType(CellType.OPENDOOR);
-            super.move(dx, dy);
+            move(dX, dY);
         } else if (nextCell.getType() == CellType.BOSSDOOR && inventory.getInventory().containsKey("hammer")) {
-            super.move(dx, dy);
+            move(dX, dY);
         } else if (nextCell.getActor() instanceof Skeleton) {
             this.setHealth(((Skeleton) nextCell.getActor()).getDamage());
             nextCell.getActor().setHealth(damage);
@@ -98,6 +105,11 @@ public class Player extends Actor {
                 nextCell.getActor().getCell().setActor(null);
             }
         }
+    }
+
+    public void setNewDirection(int dX, int dY) {
+        this.dX = dX;
+        this.dY = dY;
     }
 
     @Override

@@ -169,153 +169,30 @@ public class Main extends Application {
                 break;
 
             case UP:
-                map.getPlayer().move(0, -1);
-                if (map.getGhosts() != null && map.getSoldiers() != null) {
-                    map.getGhosts().forEach(g -> {
-                        if (g.getX() > map.getPlayer().getX()) {
-                            g.move(-1, 0);
-                        }
-                        if (g.getX() < map.getPlayer().getX()) {
-                            g.move(1, 0);
-                        }
-                        if (g.getY() > map.getPlayer().getY()) {
-                            g.move(0, -1);
-                        }
-                        if (g.getY() < map.getPlayer().getY()) {
-                            g.move(0, 1);
-                        }
-                    });
-                    map.getSoldiers().forEach(s -> {
-                        if (s.getX() > map.getPlayer().getX()) {
-                            s.move(-1, 0);
-                        }
-                        if (s.getX() < map.getPlayer().getX()) {
-                            s.move(1, 0);
-                        }
-                        if (s.getY() > map.getPlayer().getY()) {
-                            s.move(0, -1);
-                        }
-                        if (s.getY() < map.getPlayer().getY()) {
-                            s.move(0, 1);
-                        }
-                    });
-                }
+                map.getPlayer().setNewDirection(0, -1);
                 refresh();
                 keyEvent.consume();
                 break;
 
             case DOWN:
-                map.getPlayer().move(0, 1);
-                if (map.getGhosts() != null && map.getSoldiers() != null) {
-                    map.getGhosts().forEach(g -> {
-                        if (g.getX() > map.getPlayer().getX()) {
-                            g.move(-1, 0);
-                        }
-                        if (g.getX() < map.getPlayer().getX()) {
-                            g.move(1, 0);
-                        }
-                        if (g.getY() > map.getPlayer().getY()) {
-                            g.move(0, -1);
-                        }
-                        if (g.getY() < map.getPlayer().getY()) {
-                            g.move(0, 1);
-                        }
-                    });
-                    map.getSoldiers().forEach(s -> {
-                        if (s.getX() > map.getPlayer().getX()) {
-                            s.move(-1, 0);
-                        }
-                        if (s.getX() < map.getPlayer().getX()) {
-                            s.move(1, 0);
-                        }
-                        if (s.getY() > map.getPlayer().getY()) {
-                            s.move(0, -1);
-                        }
-                        if (s.getY() < map.getPlayer().getY()) {
-                            s.move(0, 1);
-                        }
-                    });
-                }
+                map.getPlayer().setNewDirection(0, 1);
                 refresh();
                 keyEvent.consume();
                 break;
 
             case LEFT:
-                map.getPlayer().move(-1, 0);
-                if (map.getGhosts() != null && map.getSoldiers() != null) {
-                    map.getGhosts().forEach(g -> {
-                        if (g.getX() > map.getPlayer().getX()) {
-                            g.move(-1, 0);
-                        }
-                        if (g.getX() < map.getPlayer().getX()) {
-                            g.move(1, 0);
-                        }
-                        if (g.getY() > map.getPlayer().getY()) {
-                            g.move(0, -1);
-                        }
-                        if (g.getY() < map.getPlayer().getY()) {
-                            g.move(0, 1);
-                        }
-
-                    });
-                    map.getSoldiers().forEach(s -> {
-                        if (s.getX() > map.getPlayer().getX()) {
-                            s.move(-1, 0);
-                        }
-                        if (s.getX() < map.getPlayer().getX()) {
-                            s.move(1, 0);
-                        }
-                        if (s.getY() > map.getPlayer().getY()) {
-                            s.move(0, -1);
-                        }
-                        if (s.getY() < map.getPlayer().getY()) {
-                            s.move(0, 1);
-                        }
-
-                    });
-                }
+                map.getPlayer().setNewDirection(-1, 0);
                 refresh();
                 keyEvent.consume();
                 break;
 
             case RIGHT:
-                map.getPlayer().move(1, 0);
-                if (map.getGhosts() != null && map.getSoldiers() != null) {
-                    map.getGhosts().forEach(g -> {
-                        if (g.getX() > map.getPlayer().getX()) {
-                            g.move(-1, 0);
-                        }
-                        if (g.getX() < map.getPlayer().getX()) {
-                            g.move(1, 0);
-                        }
-                        if (g.getY() > map.getPlayer().getY()) {
-                            g.move(0, -1);
-                        }
-                        if (g.getY() < map.getPlayer().getY()) {
-                            g.move(0, 1);
-                        }
-
-                    });
-                    map.getSoldiers().forEach(s -> {
-                        if (s.getX() > map.getPlayer().getX()) {
-                            s.move(-1, 0);
-                        }
-                        if (s.getX() < map.getPlayer().getX()) {
-                            s.move(1, 0);
-                        }
-                        if (s.getY() > map.getPlayer().getY()) {
-                            s.move(0, -1);
-                        }
-                        if (s.getY() < map.getPlayer().getY()) {
-                            s.move(0, 1);
-                        }
-
-                    });
-                }
+                map.getPlayer().setNewDirection(1, 0);
                 refresh();
                 keyEvent.consume();
                 break;
         }
+        update();
 
         if (map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).getType() == CellType.OPENDOOR) {
             Player player = map.getPlayer();
@@ -334,6 +211,14 @@ public class Main extends Application {
             map.setPlayer(player);
         }
 
+    }
+
+    public void update() {
+        map.getPlayer().makeMove();
+        if (map.getGhosts() != null && map.getSoldiers() != null) {
+            map.getGhosts().forEach(g -> g.makeMove());
+            map.getSoldiers().forEach(s -> s.makeMove());
+        }
     }
 
 

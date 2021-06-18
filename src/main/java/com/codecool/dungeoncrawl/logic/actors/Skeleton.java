@@ -10,6 +10,11 @@ public class Skeleton extends Actor {
     }
 
     @Override
+    public void makeMove() {
+
+    }
+
+    @Override
     public void setHealth(int damage) {
         this.health -= damage;
     }

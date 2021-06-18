@@ -52,7 +52,7 @@ public class MapLoader {
                             break;
                         case 'g':
                             cell.setType(CellType.FLOOR);
-                            Ghost ghost = new Ghost(cell);
+                            Ghost ghost = new Ghost(cell, map);
                             map.getGhosts().add(ghost);
                             break;
                         case 'p':
@@ -61,7 +61,7 @@ public class MapLoader {
                             break;
                         case 'v':
                             cell.setType(CellType.FLOOR);
-                            Soldier soldier = new Soldier(cell);
+                            Soldier soldier = new Soldier(cell, map);
                             map.getSoldiers().add(soldier);
                             break;
                         default:
@@ -121,7 +121,7 @@ public class MapLoader {
                             break;
                         case 'g':
                             cell.setType(CellType.FLOOR);
-                            Ghost ghost = new Ghost(cell);
+                            Ghost ghost = new Ghost(cell, map);
                             map.getGhosts().add(ghost);
                             break;
                         case 'p':
@@ -130,7 +130,7 @@ public class MapLoader {
                             break;
                         case 'v':
                             cell.setType(CellType.FLOOR);
-                            Soldier soldier = new Soldier(cell);
+                            Soldier soldier = new Soldier(cell, map);
                             map.getSoldiers().add(soldier);
                             break;
                         case 'f':

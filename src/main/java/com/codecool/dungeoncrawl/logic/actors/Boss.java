@@ -25,6 +25,11 @@ public class Boss extends Actor{
     }
 
     @Override
+    public void makeMove() {
+
+    }
+
+    @Override
     public String getTileName() {
         return "boss";
     }
