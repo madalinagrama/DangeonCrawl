@@ -172,29 +172,32 @@ public class Main extends Application {
 
             case UP:
                 map.getPlayer().setNewDirection(0, -1);
+                update();
                 refresh();
                 keyEvent.consume();
                 break;
 
             case DOWN:
                 map.getPlayer().setNewDirection(0, 1);
+                update();
                 refresh();
                 keyEvent.consume();
                 break;
 
             case LEFT:
                 map.getPlayer().setNewDirection(-1, 0);
+                update();
                 refresh();
                 keyEvent.consume();
                 break;
 
             case RIGHT:
                 map.getPlayer().setNewDirection(1, 0);
+                update();
                 refresh();
                 keyEvent.consume();
                 break;
         }
-        update();
 
         if (map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).getType() == CellType.OPENDOOR) {
             Player player = map.getPlayer();
