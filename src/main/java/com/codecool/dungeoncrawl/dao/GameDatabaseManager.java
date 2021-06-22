@@ -21,8 +21,10 @@ public class GameDatabaseManager {
 
     public void savePlayer(Player player) {
         PlayerModel model = new PlayerModel(player);
+        model.setMap_id(player.getMap_id());
         playerDao.add(model);
     }
+
 
     private DataSource connect() throws SQLException {
         dotenv = Dotenv.load();

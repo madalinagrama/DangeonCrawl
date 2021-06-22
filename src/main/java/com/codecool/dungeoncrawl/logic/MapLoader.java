@@ -38,6 +38,7 @@ public class MapLoader {
                         case '@':
                             cell.setType(CellType.FLOOR);
                             map.setPlayer(new Player(cell));
+                            map.getPlayer().setMap_id(1);
                             break;
                         case 'w':
                             cell.setType(CellType.SWORD);
