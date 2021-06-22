@@ -1,4 +1,4 @@
-package com.codecool.dungeoncrawl.logic;
+package com.codecool.dungeoncrawl.logic.modals;
 
 import com.codecool.dungeoncrawl.App;
 import com.codecool.dungeoncrawl.Main;
@@ -14,10 +14,11 @@ import java.util.HashMap;
 import java.util.StringJoiner;
 
 
-public class ReplayGame {
+public class SaveGame {
 
     public static void display(String title, String message, Main main) {
         Stage window = new Stage();
+        TextField nameField = new TextField();
 
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle(title);
@@ -29,18 +30,27 @@ public class ReplayGame {
 
 //        Label label;
 
-        Button closeButton = new Button("Restart Game");
-        closeButton.setOnAction(e -> {
-            main.restart();
+        Button saveGame = new Button("Save Game");
+        saveGame.setOnAction( e -> {
+            String name = getData(nameField);
+            main.save(name);
             window.close();
         });
 
+        Button cancel = new Button("Cancel");
+        cancel.setOnAction(e -> {
+            window.close();
+        });
 
-        VBox layout = new VBox(label, closeButton);
-        closeButton.setTranslateX(75);
-        closeButton.setTranslateY(150);
+        VBox layout = new VBox(label, saveGame, nameField, cancel);
+        saveGame.setTranslateX(75);
+        saveGame.setTranslateY(150);
         Scene scene = new Scene(layout);
         window.setScene(scene);
         window.showAndWait();
+    }
+
+    public static String getData(TextField nameField) {
+        return nameField.getText();
     }
 }

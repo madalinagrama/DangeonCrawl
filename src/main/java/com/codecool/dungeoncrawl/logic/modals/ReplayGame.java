@@ -1,4 +1,7 @@
-package com.codecool.dungeoncrawl.logic;
+package com.codecool.dungeoncrawl.logic.modals;
+
+import com.codecool.dungeoncrawl.App;
+import com.codecool.dungeoncrawl.Main;
 import com.codecool.dungeoncrawl.logic.Inventory;
 import javafx.scene.*;
 import javafx.stage.*;
@@ -11,31 +14,30 @@ import java.util.HashMap;
 import java.util.StringJoiner;
 
 
-public class AlertBox {
+public class ReplayGame {
 
-    public static void display(Inventory item, String title) {
+    public static void display(String title, String message, Main main) {
         Stage window = new Stage();
 
         window.initModality(Modality.APPLICATION_MODAL);
         window.setTitle(title);
+        Label label = new Label(message);
+        label.setTranslateX(90);
+        label.setTranslateY(70);
         window.setMinWidth(250);
         window.setMinHeight(250);
 
 //        Label label;
 
-        Button closeButton = new Button("Close");
-        closeButton.setOnAction(e -> window.close());
-
-        VBox layout = new VBox(closeButton);
-        item.getInventory().entrySet().forEach(entry -> {
-            Label label = new Label();
-
-            label.setText(entry.getKey() + ": " + entry.getValue());
-            layout.getChildren().add(label);
-
+        Button closeButton = new Button("Restart Game");
+        closeButton.setOnAction(e -> {
+            main.restart();
+            window.close();
         });
 
-        closeButton.setTranslateX(100);
+
+        VBox layout = new VBox(label, closeButton);
+        closeButton.setTranslateX(75);
         closeButton.setTranslateY(150);
         Scene scene = new Scene(layout);
         window.setScene(scene);

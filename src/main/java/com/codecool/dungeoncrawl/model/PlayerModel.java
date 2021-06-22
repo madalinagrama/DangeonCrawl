@@ -7,6 +7,7 @@ public class PlayerModel extends BaseModel {
     private int hp;
     private int x;
     private int y;
+    private int map_id;
 
     public PlayerModel(String playerName, int x, int y) {
         this.playerName = playerName;
@@ -53,5 +54,13 @@ public class PlayerModel extends BaseModel {
 
     public void setY(int y) {
         this.y = y;
+    }
+
+    public int getMap_id() {
+        return map_id;
+    }
+
+    public void setMap_id(int map_id) {
+        this.map_id = map_id;
     }
 }

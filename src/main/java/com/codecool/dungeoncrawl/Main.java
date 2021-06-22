@@ -1,26 +1,25 @@
 package com.codecool.dungeoncrawl;
 
+import com.codecool.dungeoncrawl.dao.PlayerDaoJdbc;
 import com.codecool.dungeoncrawl.logic.*;
-import com.codecool.dungeoncrawl.logic.actors.Actor;
 import com.codecool.dungeoncrawl.logic.actors.Ghost;
 import com.codecool.dungeoncrawl.logic.actors.Player;
-import com.codecool.dungeoncrawl.logic.AlertBox;
-import com.codecool.dungeoncrawl.logic.ReplayGame;
+import com.codecool.dungeoncrawl.logic.modals.AlertBox;
+import com.codecool.dungeoncrawl.logic.modals.ReplayGame;
 import com.codecool.dungeoncrawl.logic.actors.Soldier;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.dao.GameDatabaseManager;
 import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
-import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.items.ItemWithEffect;
+import com.codecool.dungeoncrawl.logic.modals.SaveGame;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.Label;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
@@ -47,6 +46,7 @@ public class Main extends Application {
     Label armorLabel = new Label();
     Button addItem = new Button("Add Item");
     Button inventory = new Button("Inventory");
+    Button saveGame = new Button("Save game");
     GameDatabaseManager dbManager;
 
     public static void main(String[] args) {
@@ -57,7 +57,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         setupDbManager();
         GridPane ui = new GridPane();
-        ui.setPrefWidth(200);
+        ui.setPrefWidth(250);
         ui.setPadding(new Insets(10));
 
         ui.add(new Label("Health: "), 0, 0);
@@ -87,11 +87,13 @@ public class Main extends Application {
 
         refresh();
         scene.addEventFilter(KeyEvent.KEY_PRESSED, this::onKeyPressed);
+        scene.addEventFilter(KeyEvent.KEY_RELEASED, this::onKeyReleased);
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
 
     }
+
 
     public void invetoryWindow() {
         inventory.setOnAction(e -> {
@@ -118,6 +120,10 @@ public class Main extends Application {
 
         });
     }
+    public void save(String name) {
+        map.getPlayer().setName(name);
+        dbManager.savePlayer(map.getPlayer());
+    }
 
     public void restart() {
         map.setPlayer(null);
@@ -126,6 +132,22 @@ public class Main extends Application {
         Player player = new Player(cell);
         player.setCell(cell);
         map.setPlayer(player);
+    }
+    private void onKeyReleased(KeyEvent keyEvent) {
+        KeyCombination exitCombinationMac = new KeyCodeCombination(KeyCode.W, KeyCombination.SHORTCUT_DOWN);
+        KeyCombination exitCombinationWin = new KeyCodeCombination(KeyCode.F4, KeyCombination.ALT_DOWN);
+        KeyCombination saveCombinationWin = new KeyCodeCombination(KeyCode.S, KeyCombination.CONTROL_ANY);
+        KeyCombination saveCombinationMac = new KeyCodeCombination(KeyCode.S, KeyCombination.SHORTCUT_DOWN);
+
+        if (exitCombinationMac.match(keyEvent)
+                || exitCombinationWin.match(keyEvent)
+                || keyEvent.getCode() == KeyCode.ESCAPE) {
+            exit();
+        }
+
+        if (saveCombinationWin.match(keyEvent) || saveCombinationMac.match(keyEvent)) {
+            SaveGame.display("Save Game", "Enter your name", this);
+        }
     }
 
     private void onKeyPressed(KeyEvent keyEvent) {
@@ -247,23 +269,6 @@ public class Main extends Application {
                     Tiles.drawTile(context, cell, x - minX, y - minY);
                     
     // -> incoming changes commented below
-    //     refresh();
-    //     scene.setOnKeyPressed(this::onKeyPressed);
-    //     scene.setOnKeyReleased(this::onKeyReleased);
-
-    //     primaryStage.setTitle("Dungeon Crawl");
-    //     primaryStage.show();
-    // }
-
-    // private void onKeyReleased(KeyEvent keyEvent) {
-    //     KeyCombination exitCombinationMac = new KeyCodeCombination(KeyCode.W, KeyCombination.SHORTCUT_DOWN);
-    //     KeyCombination exitCombinationWin = new KeyCodeCombination(KeyCode.F4, KeyCombination.ALT_DOWN);
-    //     if (exitCombinationMac.match(keyEvent)
-    //             || exitCombinationWin.match(keyEvent)
-    //             || keyEvent.getCode() == KeyCode.ESCAPE) {
-    //         exit();
-    //     }
-    // }
 
     // private void onKeyPressed(KeyEvent keyEvent) {
     //     switch (keyEvent.getCode()) {
@@ -290,16 +295,7 @@ public class Main extends Application {
     //     }
     // }
 
-    // private void refresh() {
-    //     context.setFill(Color.BLACK);
-    //     context.fillRect(0, 0, canvas.getWidth(), canvas.getHeight());
-    //     for (int x = 0; x < map.getWidth(); x++) {
-    //         for (int y = 0; y < map.getHeight(); y++) {
-    //             Cell cell = map.getCell(x, y);
-    //             if (cell.getActor() != null) {
-    //                 Tiles.drawTile(context, cell.getActor(), x, y);
-    //             } else {
-    //                 Tiles.drawTile(context, cell, x, y);
+
                 }
             }
         }
@@ -326,4 +322,6 @@ public class Main extends Application {
         }
         System.exit(0);
     }
+
+
 }

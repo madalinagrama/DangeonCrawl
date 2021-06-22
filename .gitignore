@@ -8,3 +8,4 @@ bin/
 .class/
 *.swp
 *.class
+.env/

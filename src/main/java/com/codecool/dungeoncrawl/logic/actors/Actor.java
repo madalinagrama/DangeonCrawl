@@ -9,8 +9,15 @@ public abstract class Actor implements Drawable {
     protected Cell cell;
     protected int health = 10;
     protected int damage;
+    protected int map_id =1;
 
+    public int getMap_id() {
+        return map_id;
+    }
 
+    public void setMap_id(int map_id) {
+        this.map_id = map_id;
+    }
 
     public Actor(Cell cell) {
         this.cell = cell;
