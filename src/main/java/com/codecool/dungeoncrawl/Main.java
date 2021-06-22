@@ -125,6 +125,10 @@ public class Main extends Application {
         dbManager.savePlayer(map.getPlayer());
     }
 
+    public void save() {
+
+    }
+
     public void restart() {
         map.setPlayer(null);
         map = MapLoader.loadMap("/map.txt");

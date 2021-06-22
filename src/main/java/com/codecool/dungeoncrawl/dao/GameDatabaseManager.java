@@ -30,9 +30,11 @@ public class GameDatabaseManager {
         dotenv = Dotenv.load();
 
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
+
         String dbName = dotenv.get("PSQL_DB_NAME");
         String user = dotenv.get("PSQL_USER_NAME");
         String password = dotenv.get("PSQL_PASSWORD");
+
 
         dataSource.setDatabaseName(dbName);
         dataSource.setUser(user);
