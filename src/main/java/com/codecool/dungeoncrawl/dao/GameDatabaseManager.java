@@ -7,8 +7,12 @@ import org.postgresql.ds.PGSimpleDataSource;
 import javax.sql.DataSource;
 import java.sql.SQLException;
 
+import io.github.cdimascio.dotenv.Dotenv;
+
+
 public class GameDatabaseManager {
     private PlayerDao playerDao;
+    private Dotenv dotenv;
 
     public void setup() throws SQLException {
         DataSource dataSource = connect();
@@ -21,10 +25,12 @@ public class GameDatabaseManager {
     }
 
     private DataSource connect() throws SQLException {
+        dotenv = Dotenv.load();
+
         PGSimpleDataSource dataSource = new PGSimpleDataSource();
-        String dbName = "test";
-        String user = "test";
-        String password = "test";
+        String dbName = dotenv.get("PSQL_DB_NAME");
+        String user = dotenv.get("PSQL_USER_NAME");
+        String password = dotenv.get("PSQL_PASSWORD");
 
         dataSource.setDatabaseName(dbName);
         dataSource.setUser(user);
