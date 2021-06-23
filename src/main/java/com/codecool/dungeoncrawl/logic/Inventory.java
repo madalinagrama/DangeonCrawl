@@ -30,5 +30,7 @@ public class Inventory {
         return inventory;
     }
 
-
+    public void setInventory(Map<String, Integer> inventory) {
+        this.inventory = inventory;
+    }
 }
