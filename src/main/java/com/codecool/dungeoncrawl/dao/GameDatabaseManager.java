@@ -3,6 +3,7 @@ package com.codecool.dungeoncrawl.dao;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.model.GameState;
+import com.codecool.dungeoncrawl.model.ItemModel;
 import com.codecool.dungeoncrawl.model.MapModel;
 import com.codecool.dungeoncrawl.model.PlayerModel;
 import com.google.gson.Gson;
@@ -21,12 +22,14 @@ public class GameDatabaseManager {
     private GameStateDao gameStateDao;
     private Dotenv dotenv;
     private MapDao mapDao;
+    private ItemDao itemDao;
 
     public void setup() throws SQLException {
         DataSource dataSource = connect();
         playerDao = new PlayerDaoJdbc(dataSource);
         gameStateDao = new GameStateDaoJdbc(dataSource);
         mapDao = new MapDaoJdbc(dataSource,gameStateDao);
+        itemDao = new ItemDaoJdbc(dataSource);
     }
 
     public void saveGame(Player player, GameMap map) {
@@ -41,11 +44,14 @@ public class GameDatabaseManager {
         GameState gameState = new GameState(sqlDate, model);
         MapModel mapModel = new MapModel(map);
         String mapString = map.getMapString();
+        ItemModel item = new ItemModel();
 
         model.setMap_id(player.getMap_id());
         mapDao.add(mapModel, mapString);
         playerDao.add(model);
         gameStateDao.add(gameState);
+
+        itemDao.add(item);
     }
 
 
