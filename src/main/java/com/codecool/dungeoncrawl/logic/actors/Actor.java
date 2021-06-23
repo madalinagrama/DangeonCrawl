@@ -10,6 +10,7 @@ public abstract class Actor implements Drawable {
     protected int health = 10;
     protected int damage;
     protected int map_id =1;
+    protected int id;
 
     public int getMap_id() {
         return map_id;
@@ -55,5 +56,13 @@ public abstract class Actor implements Drawable {
 
     public int getY() {
         return cell.getY();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }
