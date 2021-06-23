@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>e752cc23-3ed8-49a2-b534-113c319f80b7</OriginalElement>
+  <nodes>
+    <node x="113.25" y="248.0">e752cc23-3ed8-49a2-b534-113c319f80b7.TABLE:dungeon_crawl.public.game_state</node>
+    <node x="58.0" y="420.0">e752cc23-3ed8-49a2-b534-113c319f80b7.TABLE:dungeon_crawl.public.maps</node>
+    <node x="161.0" y="627.0">e752cc23-3ed8-49a2-b534-113c319f80b7.TABLE:dungeon_crawl.public.items</node>
+    <node x="0.0" y="614.0">e752cc23-3ed8-49a2-b534-113c319f80b7.TABLE:dungeon_crawl.public.actors</node>
+    <node x="72.5" y="0.0">e752cc23-3ed8-49a2-b534-113c319f80b7.TABLE:dungeon_crawl.public.player</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="e752cc23-3ed8-49a2-b534-113c319f80b7.TABLE:dungeon_crawl.public.maps" target="e752cc23-3ed8-49a2-b534-113c319f80b7.TABLE:dungeon_crawl.public.game_state" relationship="REFERENCES">
+      <point x="46.25" y="-72.0" />
+      <point x="196.75" y="393.0" />
+      <point x="198.25" y="393.0" />
+      <point x="0.0" y="59.0" />
+    </edge>
+    <edge source="e752cc23-3ed8-49a2-b534-113c319f80b7.TABLE:dungeon_crawl.public.items" target="e752cc23-3ed8-49a2-b534-113c319f80b7.TABLE:dungeon_crawl.public.maps" relationship="REFERENCES">
+      <point x="0.0" y="-85.0" />
+      <point x="230.5" y="589.0" />
+      <point x="150.5" y="589.0" />
+      <point x="0.0" y="72.0" />
+    </edge>
+    <edge source="e752cc23-3ed8-49a2-b534-113c319f80b7.TABLE:dungeon_crawl.public.game_state" target="e752cc23-3ed8-49a2-b534-113c319f80b7.TABLE:dungeon_crawl.public.player" relationship="REFERENCES">
+      <point x="0.0" y="-59.0" />
+      <point x="198.25" y="222.0" />
+      <point x="189.5" y="222.0" />
+      <point x="39.0" y="98.0" />
+    </edge>
+    <edge source="e752cc23-3ed8-49a2-b534-113c319f80b7.TABLE:dungeon_crawl.public.player" target="e752cc23-3ed8-49a2-b534-113c319f80b7.TABLE:dungeon_crawl.public.maps" relationship="REFERENCES">
+      <point x="-39.0" y="98.0" />
+      <point x="111.5" y="222.0" />
+      <point x="102.75" y="222.0" />
+      <point x="102.75" y="393.0" />
+      <point x="104.25" y="393.0" />
+      <point x="-46.25" y="-72.0" />
+    </edge>
+    <edge source="e752cc23-3ed8-49a2-b534-113c319f80b7.TABLE:dungeon_crawl.public.actors" target="e752cc23-3ed8-49a2-b534-113c319f80b7.TABLE:dungeon_crawl.public.maps" relationship="REFERENCES">
+      <point x="0.0" y="-98.0" />
+      <point x="70.5" y="589.0" />
+      <point x="150.5" y="589.0" />
+      <point x="0.0" y="72.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic" zoom="0.6180722891566265" showDependencies="false" x="150.0" y="405.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Columns</Category>
+    <Category>Key columns</Category>
+    <Category>Virtual foreign keys</Category>
+  </Categories>
+</Diagram>
+

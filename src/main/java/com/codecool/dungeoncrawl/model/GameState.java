@@ -6,12 +6,10 @@ import java.util.List;
 
 public class GameState extends BaseModel {
     private Date savedAt;
-    private String currentMap;
     private List<String> discoveredMaps = new ArrayList<>();
     private PlayerModel player;
 
-    public GameState(String currentMap, Date savedAt, PlayerModel player) {
-        this.currentMap = currentMap;
+    public GameState(Date savedAt, PlayerModel player) {
         this.savedAt = savedAt;
         this.player = player;
     }
@@ -24,13 +22,10 @@ public class GameState extends BaseModel {
         this.savedAt = savedAt;
     }
 
-    public String getCurrentMap() {
-        return currentMap;
+    public int getCurrentMap() {
+        return player.getMap_id();
     }
 
-    public void setCurrentMap(String currentMap) {
-        this.currentMap = currentMap;
-    }
 
     public List<String> getDiscoveredMaps() {
         return discoveredMaps;
