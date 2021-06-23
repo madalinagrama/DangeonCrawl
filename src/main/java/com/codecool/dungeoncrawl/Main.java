@@ -122,12 +122,9 @@ public class Main extends Application {
     }
     public void save(String name) {
         map.getPlayer().setName(name);
-        dbManager.savePlayer(map.getPlayer());
+        dbManager.saveGame(map.getPlayer(),map);
     }
 
-    public void save() {
-
-    }
 
     public void restart() {
         map.setPlayer(null);

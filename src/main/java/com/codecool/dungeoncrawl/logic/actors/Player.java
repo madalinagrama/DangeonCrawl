@@ -7,6 +7,7 @@ import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.logic.items.Sword;
 
 public class Player extends Actor {
+    private int id = 1;
     private Inventory inventory;
     private int armor = 0;
     private int dX;
@@ -20,6 +21,11 @@ public class Player extends Actor {
         this.damage = 5;
    }
 
+    public Player(Cell cell, String name) {
+        super(cell);
+        this.name = name;
+    }
+
     public void setDamage() {
         this.damage += 6;
     }
@@ -32,12 +38,6 @@ public class Player extends Actor {
         return inventory;
     }
     private String name;
-
-
-    public Player(Cell cell, String name) {
-        super(cell);
-        this.name = name;
-    }
 
     public String getName() {
         return name;
@@ -121,4 +121,11 @@ public class Player extends Actor {
         this.health += points;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }
