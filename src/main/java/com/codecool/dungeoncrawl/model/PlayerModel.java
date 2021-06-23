@@ -1,6 +1,8 @@
 package com.codecool.dungeoncrawl.model;
 
+import com.codecool.dungeoncrawl.logic.Inventory;
 import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.google.gson.Gson;
 
 public class PlayerModel extends BaseModel {
     private String playerName;
@@ -10,8 +12,9 @@ public class PlayerModel extends BaseModel {
     private int x;
     private int y;
     private int map_id;
+    private Inventory inventory;
 
-    public PlayerModel(int id, String playerName, int hp, int damage, int armor, int x, int y) {
+    public PlayerModel(int id, String playerName, int hp, int damage, int armor, int x, int y,int map_id, Inventory inventory) {
         this.playerName = playerName;
         this.x = x;
         this.y = y;
@@ -19,6 +22,8 @@ public class PlayerModel extends BaseModel {
         this.damage = damage;
         this.armor = armor;
         this.id = id;
+        this.map_id = map_id;
+        this.inventory = inventory;
     }
 
     public PlayerModel(Player player) {
@@ -30,6 +35,7 @@ public class PlayerModel extends BaseModel {
         this.damage = player.getDamage();
         this.armor = player.getArmor();
         this.id = player.getId();
+        this.inventory = player.getInventory();
 
     }
 
@@ -89,4 +95,7 @@ public class PlayerModel extends BaseModel {
         this.armor = armor;
     }
 
+    public Inventory getInventory() {
+        return inventory;
+    }
 }

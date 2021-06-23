@@ -1,7 +1,9 @@
 package com.codecool.dungeoncrawl.dao;
 
 import com.codecool.dungeoncrawl.logic.GameMap;
+import com.codecool.dungeoncrawl.logic.Inventory;
 import com.codecool.dungeoncrawl.logic.actors.Player;
+import com.codecool.dungeoncrawl.logic.items.Sword;
 import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.MapModel;
 import com.codecool.dungeoncrawl.model.PlayerModel;
@@ -12,6 +14,8 @@ import javax.sql.DataSource;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDate;
+import java.util.HashMap;
+import java.util.Map;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
@@ -30,11 +34,11 @@ public class GameDatabaseManager {
     }
 
     public void saveGame(Player player, GameMap map) {
-//        Gson gson = new Gson();
-//        String json = gson.toJson(map);
-//
-//        GameMap car = gson.fromJson(json, GameMap.class);
-//        System.out.println(car.getPlayer().getName());
+        Gson gson = new Gson();
+        String json = gson.toJson(player.getInventory());
+
+//        Inventory car = gson.fromJson(json, Inventory.class);
+//        System.out.println(json);
 
         java.sql.Date sqlDate = java.sql.Date.valueOf( LocalDate.now() );
         PlayerModel model = new PlayerModel(player);
@@ -46,6 +50,12 @@ public class GameDatabaseManager {
         mapDao.add(mapModel, mapString);
         playerDao.add(model);
         gameStateDao.add(gameState);
+        PlayerModel pl = playerDao.get(1);
+
+//        System.out.println(pl.getInventory().getInventory());
+//        pl.getInventory().addItem(pl.getInventory().getInventory(),new Sword(map.getCell(10,12)),"sword",1);
+//        System.out.println(pl.getId());
+        System.out.println(pl.getInventory().getInventory());
     }
 
 

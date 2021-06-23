@@ -15,7 +15,9 @@ CREATE TABLE public.player (
                                armor integer NOT NULL,
                                x integer NOT NULL,
                                y integer NOT NULL,
-                               map_id integer NOT NULL
+                               map_id integer NOT NULL,
+                               inventory json
+
 );
 
 DROP TABLE IF EXISTS public.actors CASCADE ;
