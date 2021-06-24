@@ -40,6 +40,7 @@ CREATE TABLE public.items (
 );
 
 
+
 DROP TABLE IF EXISTS  public.maps CASCADE ;
 CREATE TABLE public.maps (
                              id serial NOT NULL PRIMARY KEY,
@@ -48,16 +49,16 @@ CREATE TABLE public.maps (
                              game_state_id serial NOT NULL
 
 );
-
-ALTER TABLE ONLY public.game_state
-    ADD CONSTRAINT fk_player_id FOREIGN KEY (player_id) REFERENCES public.player(id);
-
-ALTER TABLE ONLY public.player
-    ADD CONSTRAINT fk_map_id FOREIGN KEY (map_id) REFERENCES public.maps(id);
-
-ALTER TABLE ONLY public.actors
-    ADD CONSTRAINT fk_map_id FOREIGN KEY (map_id) REFERENCES public.maps(id);
-
-ALTER TABLE ONLY public.items
-    ADD CONSTRAINT fk_map_id FOREIGN KEY (map_id) REFERENCES public.maps(id);
+--
+-- ALTER TABLE ONLY public.game_state
+--     ADD CONSTRAINT fk_player_id FOREIGN KEY (player_id) REFERENCES public.player(id);
+--
+-- ALTER TABLE ONLY public.player
+--     ADD CONSTRAINT fk_map_id FOREIGN KEY (map_id) REFERENCES public.maps(id);
+--
+-- ALTER TABLE ONLY public.actors
+--     ADD CONSTRAINT fk_map_id FOREIGN KEY (map_id) REFERENCES public.maps(id);
+--
+-- ALTER TABLE ONLY public.items
+--     ADD CONSTRAINT fk_map_id FOREIGN KEY (map_id) REFERENCES public.maps(id);
 

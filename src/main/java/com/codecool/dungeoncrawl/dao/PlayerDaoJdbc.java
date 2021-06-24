@@ -48,11 +48,17 @@ public class PlayerDaoJdbc implements PlayerDao {
     @Override
     public void update(PlayerModel player) {
         try(Connection conn = dataSource.getConnection()) {
-            String sql = "UPDATE player SET player_name= ? , map_id = ? WHERE id = ?";
+            String sql = "UPDATE player SET player_name= ? ,hp = ?, damage = ?, armor = ?, x = ?, y = ?, map_id = ?, inventory = ?::json WHERE id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1,player.getPlayerName());
-            ps.setInt(2, player.getMap_id());
-            ps.setInt(3, player.getId());
+            ps.setInt(2, player.getHp());
+            ps.setInt(3, player.getDamage());
+            ps.setInt(4, player.getArmor());
+            ps.setInt(5, player.getX());
+            ps.setInt(6, player.getY());
+            ps.setInt(7, player.getMap_id());
+            ps.setString(8, gson.toJson(player.getInventory()));
+            ps.setInt(9, player.getId());
 
             ps.executeUpdate();
 

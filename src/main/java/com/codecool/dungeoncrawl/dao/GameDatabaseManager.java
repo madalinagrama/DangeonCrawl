@@ -48,7 +48,14 @@ public class GameDatabaseManager {
             if (playerModel.getPlayerName().equals(name)){
                 ConfirmName.display("Confirm Save", "Would you like to overwrite the already existing state?",main ,name);
                     if (ConfirmName.getData()){
-                        // de facut updates in dao
+                        PlayerModel model = new PlayerModel(player);
+                        System.out.println(model.getId());
+                        System.out.println(model.getX());
+                        System.out.println(model.getY());
+                        System.out.println(model.getPlayerName());
+                        model.setId(playerModel.getId());
+                        playerDao.update(model);
+                        return;
                 } else {
                     return;
                 }
