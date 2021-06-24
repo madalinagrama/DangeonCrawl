@@ -24,7 +24,7 @@ public class PlayerDaoJdbc implements PlayerDao {
     @Override
     public void add(PlayerModel player) {
         try (Connection conn = dataSource.getConnection()) {
-            String sql = "INSERT INTO player (player_name, hp, damage, armor, x, y, map_id, inventory) VALUES (?, ?, ?, ?, ?, ?, ?, ?::json)";
+            String sql = "INSERT INTO player (player_name, hp, damage, armor, x, y, inventory) VALUES (?, ?, ?, ?, ?, ?, ?::json)";
             PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, player.getPlayerName());
             statement.setInt(2, player.getHp());
@@ -32,14 +32,13 @@ public class PlayerDaoJdbc implements PlayerDao {
             statement.setInt(4, player.getArmor());
             statement.setInt(5, player.getX());
             statement.setInt(6, player.getY());
-            statement.setInt(7, player.getMap_id());
-            statement.setString(8, gson.toJson(player.getInventory()));
+            statement.setString(7, gson.toJson(player.getInventory()));
 
             statement.executeUpdate();
 
             ResultSet resultSet = statement.getGeneratedKeys();
             resultSet.next();
-//            player.setId(resultSet.getInt(1));
+            player.setId(resultSet.getInt(1));
 
         } catch (SQLException e) {
             throw new RuntimeException(e);

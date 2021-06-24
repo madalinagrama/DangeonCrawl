@@ -34,7 +34,7 @@ public class GameDatabaseManager {
         DataSource dataSource = connect();
         playerDao = new PlayerDaoJdbc(dataSource);
         gameStateDao = new GameStateDaoJdbc(dataSource, playerDao);
-        mapDao = new MapDaoJdbc(dataSource,gameStateDao);
+        mapDao = new MapDaoJdbc(dataSource,gameStateDao, playerDao);
         actorDao = new ActorDaoJdbc(dataSource);
     }
 
@@ -69,18 +69,18 @@ public class GameDatabaseManager {
         String mapString = map.getMapString();
 
         model.setMap_id(player.getMap_id());
-        mapDao.add(mapModel, mapString);
         playerDao.add(model);
         gameStateDao.add(gameState);
+        mapDao.add(mapModel, mapString, model, playerDao);
 
         for (Soldier soldier : map.getSoldiers()) {
             ActorModel actor = new ActorModel(soldier);
-            actor.setMap_id(1);// de reviziut cu id-ul hartii
+            actor.setMap_id(model.getMap_id());
             actorDao.add(actor);
         }
         for (Ghost ghost : map.getGhosts()) {
             ActorModel actor = new ActorModel(ghost);
-            actor.setMap_id(1);// de reviziut cu id-ul hartii
+            actor.setMap_id(model.getMap_id());
             actorDao.add(actor);
         }
 //        if(map.getName().equals("map2")) {

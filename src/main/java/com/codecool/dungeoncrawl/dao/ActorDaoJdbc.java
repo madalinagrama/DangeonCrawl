@@ -27,7 +27,7 @@ public class ActorDaoJdbc implements ActorDao {
         statement.executeUpdate();
         ResultSet resultSet = statement.getGeneratedKeys();
         resultSet.next();
-//            player.setId(resultSet.getInt(1));
+            actor.setMap_id(resultSet.getInt(5));
     } catch (
     SQLException e) {
         throw new RuntimeException(e);

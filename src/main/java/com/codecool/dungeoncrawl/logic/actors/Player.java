@@ -8,7 +8,7 @@ import com.codecool.dungeoncrawl.logic.items.Sword;
 import com.codecool.dungeoncrawl.model.PlayerModel;
 
 public class Player extends Actor {
-    private int id = 1;
+    private int id;
     private Inventory inventory;
     private int armor = 0;
     private int dX;

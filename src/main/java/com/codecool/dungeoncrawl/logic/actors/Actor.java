@@ -9,7 +9,7 @@ public abstract class Actor implements Drawable {
     protected Cell cell;
     protected int health = 10;
     protected int damage;
-    protected int map_id =1;
+    protected int map_id;
     protected int id;
 
     public int getMap_id() {
