@@ -1,10 +1,12 @@
 package com.codecool.dungeoncrawl.dao;
 
+import com.codecool.dungeoncrawl.Main;
 import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.logic.actors.Ghost;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Soldier;
 import com.codecool.dungeoncrawl.logic.items.Sword;
+import com.codecool.dungeoncrawl.logic.modals.ConfirmName;
 import com.codecool.dungeoncrawl.model.ActorModel;
 import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.MapModel;
@@ -38,24 +40,20 @@ public class GameDatabaseManager {
         actorDao = new ActorDaoJdbc(dataSource);
     }
 
-    public void saveGame(Player player, GameMap map) {
+    public void saveGame(Player player, GameMap map, String name, Main main) {
 
         List<PlayerModel> players = playerDao.getAll();
 
-//        for (PlayerModel playerModel : players) {
-//            if (playerModel.getPlayerName().equals(player.getName())){
-//                //modal yes/no
-//                {
-//                    //if yes-overwrite
-//                } // else
-//                {
-////                    dont
-//                }
-//
-//            }
-//
-//        }
-
+        for (PlayerModel playerModel : players) {
+            if (playerModel.getPlayerName().equals(name)){
+                ConfirmName.display("Confirm Save", "Would you like to overwrite the already existing state?",main ,name);
+                    if (ConfirmName.getData()){
+                        // de facut updates in dao
+                } else {
+                    return;
+                }
+            }
+        }
         Gson gson = new Gson();
         String json = gson.toJson(player.getInventory());
 
@@ -104,7 +102,6 @@ public class GameDatabaseManager {
 //        PlayerModel pl = playerDao.get(2);
 //        Player newPlayer = new Player(map.getCell(pl.getX(),pl.getY()), pl);
 //        map.setPlayer(newPlayer);
-
     }
 
     public GameMap  loadMap(GameMap map) {

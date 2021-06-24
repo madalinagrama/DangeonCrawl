@@ -122,7 +122,7 @@ public class Main extends Application {
     }
     public void save(String name) {
         map.getPlayer().setName(name);
-        dbManager.saveGame(map.getPlayer(),map);
+        dbManager.saveGame(map.getPlayer(),map, name, this);
 //        map = dbManager.loadMap(map); // de refacut
     }
 
