@@ -96,6 +96,8 @@ public class GameDatabaseManager {
 //        pl.getInventory().addItem(pl.getInventory().getInventory(),new Sword(map.getCell(10,12)),"sword",1);
 //        System.out.println(pl.getId());
 //        System.out.println(pl.getInventory().getInventory());
+
+//        System.out.println(pl.getInventory().getInventory());
 //
 //        map.setPlayer(null);
 //        map = MapLoader.loadSavedMap(mapDao.get(2));
