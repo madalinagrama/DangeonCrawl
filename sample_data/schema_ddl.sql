@@ -30,17 +30,6 @@ CREATE TABLE public.actors (
                                map_id integer NOT NULL
 );
 
-DROP TABLE IF EXISTS public.items CASCADE ;
-CREATE TABLE public.items (
-                              id serial NOT NULL PRIMARY KEY,
-                              item_type text NOT NULL,
-                              x integer NOT NULL,
-                              y integer NOT NULL,
-                              map_id integer NOT NULL
-);
-
-
-
 DROP TABLE IF EXISTS  public.maps CASCADE ;
 CREATE TABLE public.maps (
                              id serial NOT NULL PRIMARY KEY,

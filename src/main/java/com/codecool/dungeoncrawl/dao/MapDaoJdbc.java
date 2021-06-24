@@ -69,7 +69,7 @@ public class MapDaoJdbc implements MapDao{
         try(Connection conn = dataSource.getConnection()) {
             String sql = "UPDATE maps SET name = ?, map = ?, game_state_id = ? WHERE id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
-            ps.setString(1, map.getName());
+            ps.setString(1,"map1");
             ps.setString(2, map.getMap().getMapString());
             ps.setInt(3, map.getGameStateId());
             ps.setInt(4, map.getId());

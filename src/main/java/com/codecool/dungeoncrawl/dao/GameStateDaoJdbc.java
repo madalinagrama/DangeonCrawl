@@ -19,6 +19,7 @@ public class GameStateDaoJdbc implements GameStateDao {
 
     private DataSource dataSource;
     private PlayerDao playerDao;
+    java.sql.Date sqlDate = java.sql.Date.valueOf( LocalDate.now() );
 
     public GameStateDaoJdbc(DataSource dataSource, PlayerDao playerDao) {
         this.dataSource = dataSource;
@@ -27,7 +28,7 @@ public class GameStateDaoJdbc implements GameStateDao {
 
     @Override
     public void add(GameState state) {
-        java.sql.Date sqlDate = java.sql.Date.valueOf( LocalDate.now() );
+
         try (Connection conn = dataSource.getConnection()) {
             String sql = "INSERT INTO game_state (saved_at, player_id) VALUES (?, ?)";
             PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
@@ -48,7 +49,21 @@ public class GameStateDaoJdbc implements GameStateDao {
 
     @Override
     public void update(GameState state) {
+        try(Connection conn = dataSource.getConnection()) {
+            String sql = "UPDATE game_state SET saved_at = ?, player_id = ? WHERE id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            state.setSavedAt(sqlDate);
+            ps.setDate(1,state.getSavedAt());
+            ps.setInt(2, state.getPlayer().getId());
+            ps.setInt(3, state.getId());
 
+            ps.executeUpdate();
+
+        }
+        catch (SQLException e) {
+
+            throw new RuntimeException(e);
+        }
     }
 
     @Override

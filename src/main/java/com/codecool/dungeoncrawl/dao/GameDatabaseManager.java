@@ -43,18 +43,21 @@ public class GameDatabaseManager {
     public void saveGame(Player player, GameMap map, String name, Main main) {
 
         List<PlayerModel> players = playerDao.getAll();
+        java.sql.Date sqlDate = java.sql.Date.valueOf(LocalDate.now());
 
         for (PlayerModel playerModel : players) {
             if (playerModel.getPlayerName().equals(name)){
                 ConfirmName.display("Confirm Save", "Would you like to overwrite the already existing state?",main ,name);
                     if (ConfirmName.getData()){
-                        PlayerModel model = new PlayerModel(player);
-                        System.out.println(model.getId());
-                        System.out.println(model.getX());
-                        System.out.println(model.getY());
-                        System.out.println(model.getPlayerName());
-                        model.setId(playerModel.getId());
-                        playerDao.update(model);
+                        PlayerModel playerUpdateModel = new PlayerModel(player);
+                        GameState gameStateUpdateModel = new GameState(sqlDate, playerUpdateModel);
+                        MapModel mapUpdateModel = new MapModel(map);
+                        playerUpdateModel.setId(playerModel.getId());
+                        gameStateUpdateModel.setId(playerModel.getId());
+                        mapUpdateModel.setId(playerModel.getId());
+                        playerDao.update(playerUpdateModel);
+                        gameStateDao.update(gameStateUpdateModel);
+                        mapDao.update(mapUpdateModel);
                         return;
                 } else {
                     return;
@@ -67,7 +70,6 @@ public class GameDatabaseManager {
 //        Inventory car = gson.fromJson(json, Inventory.class);
 //        System.out.println(json);
 
-        java.sql.Date sqlDate = java.sql.Date.valueOf(LocalDate.now());
         PlayerModel model = new PlayerModel(player);
         GameState gameState = new GameState(sqlDate, model);
         MapModel mapModel = new MapModel(map);
