@@ -99,6 +99,38 @@ public class PlayerDaoJdbc implements PlayerDao {
         }
     }
 
+    public PlayerModel getByName(String name) {
+        try(Connection conn = dataSource.getConnection()) {
+            String sql = "SELECT * FROM player WHERE player_name = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setString(1,name);
+//            System.out.println(name);
+
+            ResultSet rs = ps.executeQuery();
+
+            if(!rs.next()) {
+                return null;
+            }
+//            System.out.println(rs.getString(name));
+
+            JSONParser parser = new JSONParser();
+            JSONObject json = (JSONObject) parser.parse(rs.getString("inventory"));
+//            System.out.println(json);
+//            System.out.println(String.valueOf(json));
+//            System.out.println(rs.getString(9));
+//            System.out.println(gson.fromJson(String.valueOf(json), Inventory.class));
+//            System.out.println(gson.fromJson(String.valueOf(json), Inventory.class).getInventory().keySet());
+//            System.out.println(gson.fromJson(String.valueOf(json), Inventory.class).getInventory().values());
+//            System.out.println(gson.fromJson(String.valueOf(json), Inventory.class).getInventory().toString());
+            return new PlayerModel(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getInt(4),rs.getInt(5),rs.getInt(6),rs.getInt(7),rs.getInt(8), gson.fromJson(String.valueOf(json), Inventory.class));
+
+        }
+        catch (SQLException | ParseException throwable) {
+            throw new RuntimeException("Error while updating the Player.", throwable);
+        }
+
+    }
+
     @Override
     public List<PlayerModel> getAll() {
         try(Connection conn = dataSource.getConnection()) {

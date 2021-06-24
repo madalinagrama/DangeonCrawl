@@ -1,5 +1,6 @@
 package com.codecool.dungeoncrawl;
 
+import com.codecool.dungeoncrawl.dao.PlayerDao;
 import com.codecool.dungeoncrawl.dao.PlayerDaoJdbc;
 import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.logic.actors.Ghost;
@@ -14,6 +15,9 @@ import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.items.ItemWithEffect;
 import com.codecool.dungeoncrawl.logic.modals.SaveGame;
+import com.codecool.dungeoncrawl.model.GameState;
+import com.codecool.dungeoncrawl.model.MapModel;
+import com.codecool.dungeoncrawl.model.PlayerModel;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.scene.Scene;
@@ -30,6 +34,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 
+import java.time.LocalDate;
 import java.util.function.Predicate;
 
 import java.sql.SQLException;
@@ -48,6 +53,7 @@ public class Main extends Application {
     Button inventory = new Button("Inventory");
     Button saveGame = new Button("Save game");
     GameDatabaseManager dbManager;
+    java.sql.Date sqlDate = java.sql.Date.valueOf(LocalDate.now());
 
     public static void main(String[] args) {
         launch(args);
@@ -123,9 +129,12 @@ public class Main extends Application {
     public void save(String name) {
         map.getPlayer().setName(name);
         dbManager.saveGame(map.getPlayer(),map, name, this);
-//        map = dbManager.loadMap(map); // de refacut
+        map = dbManager.loadMap(map); // de refacut
     }
 
+    public void updateGame(String name) {
+        dbManager.update(map.getPlayer(),map, name);
+    }
 
     public void restart() {
         map.setPlayer(null);
@@ -269,35 +278,6 @@ public class Main extends Application {
                     Tiles.drawTile(context, cell.getActor(), x - minX, y - minY);
                 } else {
                     Tiles.drawTile(context, cell, x - minX, y - minY);
-                    
-    // -> incoming changes commented below
-
-    // private void onKeyPressed(KeyEvent keyEvent) {
-    //     switch (keyEvent.getCode()) {
-    //         case UP:
-    //             map.getPlayer().move(0, -1);
-    //             refresh();
-    //             break;
-    //         case DOWN:
-    //             map.getPlayer().move(0, 1);
-    //             refresh();
-    //             break;
-    //         case LEFT:
-    //             map.getPlayer().move(-1, 0);
-    //             refresh();
-    //             break;
-    //         case RIGHT:
-    //             map.getPlayer().move(1, 0);
-    //             refresh();
-    //             break;
-    //         case S:
-    //             Player player = map.getPlayer();
-    //             dbManager.savePlayer(player);
-    //             break;
-    //     }
-    // }
-
-
                 }
             }
         }

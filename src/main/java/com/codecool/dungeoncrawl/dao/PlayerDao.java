@@ -9,5 +9,7 @@ public interface PlayerDao {
     void add(PlayerModel player);
     void update(PlayerModel player);
     PlayerModel get(int id);
+    PlayerModel getByName(String name);
     List<PlayerModel> getAll();
+
 }

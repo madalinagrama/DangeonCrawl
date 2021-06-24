@@ -1,6 +1,7 @@
 package com.codecool.dungeoncrawl.logic.modals;
 
 import com.codecool.dungeoncrawl.Main;
+import com.codecool.dungeoncrawl.model.PlayerModel;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -9,10 +10,12 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import javax.xml.crypto.Data;
+
 public class ConfirmName {
     static boolean result;
 
-    public static void display(String title, String message,Main main, String name) {
+    public static void display(String title, String message, Main main, String name) {
         Stage window = new Stage();
 
         window.initModality(Modality.APPLICATION_MODAL);
@@ -27,16 +30,17 @@ public class ConfirmName {
 
         Button saveGame = new Button("Yes");
         saveGame.setOnAction( e -> {
-            main.save(name);
-            window.close();
+            main.updateGame(name);
             result = true;
+            window.close();
 
         });
 
         Button cancel = new Button("No");
         cancel.setOnAction(e -> {
-
+            window.close();
             result = false;
+            SaveGame.display("Save Game", "Enter your name", main);
         });
 
         VBox layout = new VBox(label, saveGame, cancel);

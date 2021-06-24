@@ -15,6 +15,7 @@ import com.google.gson.Gson;
 import org.postgresql.ds.PGSimpleDataSource;
 
 import javax.sql.DataSource;
+import javax.xml.namespace.QName;
 import java.sql.SQLException;
 import java.time.Instant;
 import java.time.LocalDate;
@@ -31,39 +32,32 @@ public class GameDatabaseManager {
     private Dotenv dotenv;
     private MapDao mapDao;
     private ActorDao actorDao;
+    java.sql.Date sqlDate = java.sql.Date.valueOf(LocalDate.now());
 
     public void setup() throws SQLException {
         DataSource dataSource = connect();
         playerDao = new PlayerDaoJdbc(dataSource);
         gameStateDao = new GameStateDaoJdbc(dataSource, playerDao);
-        mapDao = new MapDaoJdbc(dataSource,gameStateDao, playerDao);
+        mapDao = new MapDaoJdbc(dataSource, gameStateDao, playerDao);
         actorDao = new ActorDaoJdbc(dataSource);
     }
 
     public void saveGame(Player player, GameMap map, String name, Main main) {
-
         List<PlayerModel> players = playerDao.getAll();
-        java.sql.Date sqlDate = java.sql.Date.valueOf(LocalDate.now());
 
         for (PlayerModel playerModel : players) {
-            if (playerModel.getPlayerName().equals(name)){
-                ConfirmName.display("Confirm Save", "Would you like to overwrite the already existing state?",main ,name);
-                    if (ConfirmName.getData()){
-                        PlayerModel playerUpdateModel = new PlayerModel(player);
-                        GameState gameStateUpdateModel = new GameState(sqlDate, playerUpdateModel);
-                        MapModel mapUpdateModel = new MapModel(map);
-                        playerUpdateModel.setId(playerModel.getId());
-                        gameStateUpdateModel.setId(playerModel.getId());
-                        mapUpdateModel.setId(playerModel.getId());
-                        playerDao.update(playerUpdateModel);
-                        gameStateDao.update(gameStateUpdateModel);
-                        mapDao.update(mapUpdateModel);
-                        return;
+            System.out.println(playerModel.getPlayerName());
+            if (playerModel.getPlayerName().equals(name)) {
+                ConfirmName.display("Confirm Save", "Would you like to overwrite the already existing state?", main, name);
+                if (ConfirmName.getData()) {
+                    update(player, map, name);
+                    return;
                 } else {
                     return;
                 }
             }
         }
+
         Gson gson = new Gson();
         String json = gson.toJson(player.getInventory());
 
@@ -90,38 +84,57 @@ public class GameDatabaseManager {
             actor.setMap_id(model.getMap_id());
             actorDao.add(actor);
         }
+
+
 //        if(map.getName().equals("map2")) {
 //            ActorModel actor = new ActorModel(map.getBoss());
 //            actor.setMap_id(1);// de reviziut cu id-ul hartii
 //            actorDao.add(actor);
 //        }
 
-
+//
 //        PlayerModel pl = playerDao.get(1);
-
+//
 //        System.out.println(pl.getInventory().getInventory());
 //        pl.getInventory().addItem(pl.getInventory().getInventory(),new Sword(map.getCell(10,12)),"sword",1);
 //        System.out.println(pl.getId());
 //        System.out.println(pl.getInventory().getInventory());
-
+//
 //        System.out.println(pl.getInventory().getInventory());
 //
 //        map.setPlayer(null);
 //        map = MapLoader.loadSavedMap(mapDao.get(2));
-//        PlayerModel pl = playerDao.get(2);
+//        pl = playerDao.get(2);
 //        Player newPlayer = new Player(map.getCell(pl.getX(),pl.getY()), pl);
 //        map.setPlayer(newPlayer);
     }
 
-    public GameMap  loadMap(GameMap map) {
-        map.setPlayer(null);
-        map = MapLoader.loadSavedMap(mapDao.get(2));
-        PlayerModel pl = playerDao.get(2);
-        Player newPlayer = new Player(map.getCell(pl.getX(),pl.getY()), pl);
-        map.setPlayer(newPlayer);
-        return map;
+    public void update(Player player, GameMap map, String name) {
+        PlayerModel playerUpdateModel = new PlayerModel(player);
+        GameState gameStateUpdateModel = new GameState(sqlDate, playerUpdateModel);
+        MapModel mapUpdateModel = new MapModel(map);
+        playerUpdateModel.setId(playerDao.getByName(name).getId());
+        gameStateUpdateModel.setId(playerDao.getByName(name).getId());
+        mapUpdateModel.setId(playerDao.getByName(name).getId());
+        playerDao.update(playerUpdateModel);
+        gameStateDao.update(gameStateUpdateModel);
+        mapDao.update(mapUpdateModel);
+
     }
 
+
+
+    public GameMap loadMap(GameMap map) {
+        if (!(map.getPlayer() == null)) {
+            map.setPlayer(null);
+            map = MapLoader.loadSavedMap(mapDao.get(2));
+            PlayerModel pl = playerDao.get(7);
+            Player newPlayer = new Player(map.getCell(pl.getX(), pl.getY()), pl);
+            map.setPlayer(newPlayer);
+            return map;
+        }
+        return null;
+    }
 
 
     private DataSource connect() throws SQLException {
@@ -132,7 +145,6 @@ public class GameDatabaseManager {
         String dbName = dotenv.get("PSQL_DB_NAME");
         String user = dotenv.get("PSQL_USER_NAME");
         String password = dotenv.get("PSQL_PASSWORD");
-
 
 
         dataSource.setDatabaseName(dbName);
