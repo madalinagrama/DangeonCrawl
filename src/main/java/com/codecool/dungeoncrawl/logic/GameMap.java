@@ -13,7 +13,7 @@ public class GameMap {
     private int height;
     private Cell[][] cells;
     private String name;
-
+    private Actor boss;
     private Player player;
     private List<Ghost> ghosts = new ArrayList<Ghost>();
     private List<Soldier> soldiers = new ArrayList<>();
@@ -88,5 +88,13 @@ public class GameMap {
             str.append("\n");
         }
         return str.toString();
+    }
+
+    public Actor getBoss() {
+        return boss;
+    }
+
+    public void setBoss(Actor boss) {
+        this.boss = boss;
     }
 }

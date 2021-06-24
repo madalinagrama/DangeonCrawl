@@ -8,6 +8,6 @@ import java.util.List;
 public interface MapDao {
     void add(MapModel map, String mapString);
     void update(MapModel map);
-    PlayerModel get(int id);
+    String get(int id);
     List<PlayerModel> getAll();
 }

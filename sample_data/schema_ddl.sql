@@ -43,7 +43,7 @@ CREATE TABLE public.items (
 DROP TABLE IF EXISTS  public.maps CASCADE ;
 CREATE TABLE public.maps (
                              id serial NOT NULL PRIMARY KEY,
-                             name text NOT NULL UNIQUE ,
+                             name text NOT NULL ,
                              map text NOT NULL,
                              game_state_id serial NOT NULL
 

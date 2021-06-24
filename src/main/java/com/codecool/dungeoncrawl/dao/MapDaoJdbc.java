@@ -1,7 +1,14 @@
 package com.codecool.dungeoncrawl.dao;
 
+import com.codecool.dungeoncrawl.logic.CellType;
+import com.codecool.dungeoncrawl.logic.GameMap;
+import com.codecool.dungeoncrawl.logic.Inventory;
 import com.codecool.dungeoncrawl.model.MapModel;
 import com.codecool.dungeoncrawl.model.PlayerModel;
+import com.google.gson.Gson;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -12,6 +19,7 @@ import java.util.stream.Collectors;
 public class MapDaoJdbc implements MapDao{
     private DataSource dataSource;
     private GameStateDao gameStateDao;
+    Gson gson = new Gson();
 
     public MapDaoJdbc(DataSource dataSource, GameStateDao gameState) {
         this.dataSource = dataSource;
@@ -52,8 +60,26 @@ public class MapDaoJdbc implements MapDao{
     }
 
     @Override
-    public PlayerModel get(int id) {
-        return null;
+    public String get(int id) {
+
+        try(Connection conn = dataSource.getConnection()) {
+            String sql = "SELECT maps.map FROM maps WHERE id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1,id);
+
+            ResultSet rs = ps.executeQuery();
+
+            if(!rs.next()) {
+                return null;
+            }
+
+
+            return rs.getString(1);
+
+        }
+        catch (SQLException throwable) {
+            throw new RuntimeException("Error while updating the Author.", throwable);
+        }
     }
 
     @Override

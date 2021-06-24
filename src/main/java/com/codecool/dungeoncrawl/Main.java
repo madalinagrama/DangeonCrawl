@@ -123,6 +123,7 @@ public class Main extends Application {
     public void save(String name) {
         map.getPlayer().setName(name);
         dbManager.saveGame(map.getPlayer(),map);
+        map = dbManager.loadMap(map); // de refacut
     }
 
 

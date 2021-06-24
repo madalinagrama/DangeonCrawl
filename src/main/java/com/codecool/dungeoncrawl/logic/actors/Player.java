@@ -5,6 +5,7 @@ import com.codecool.dungeoncrawl.logic.CellType;
 import com.codecool.dungeoncrawl.logic.Inventory;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.logic.items.Sword;
+import com.codecool.dungeoncrawl.model.PlayerModel;
 
 public class Player extends Actor {
     private int id = 1;
@@ -25,6 +26,18 @@ public class Player extends Actor {
         super(cell);
         this.name = name;
     }
+
+    public Player(Cell cell, PlayerModel playerModel) {
+        super(cell);
+        this.name = playerModel.getPlayerName();
+        this.id = playerModel.getId();
+        this.health = playerModel.getHp();
+        this.damage = playerModel.getDamage();
+        this.armor = playerModel.getArmor();
+        this.inventory = playerModel.getInventory();
+        this.map_id = playerModel.getMap_id();
+    }
+
 
     public void setDamage() {
         this.damage += 6;

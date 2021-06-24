@@ -1,7 +1,12 @@
 package com.codecool.dungeoncrawl.dao;
 
+import com.codecool.dungeoncrawl.logic.Inventory;
 import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.PlayerModel;
+import com.google.gson.Gson;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -13,9 +18,11 @@ import java.time.LocalDate;
 public class GameStateDaoJdbc implements GameStateDao {
 
     private DataSource dataSource;
+    private PlayerDao playerDao;
 
-    public GameStateDaoJdbc(DataSource dataSource) {
+    public GameStateDaoJdbc(DataSource dataSource, PlayerDao playerDao) {
         this.dataSource = dataSource;
+        this.playerDao = playerDao;
     }
 
     @Override
@@ -46,7 +53,37 @@ public class GameStateDaoJdbc implements GameStateDao {
 
     @Override
     public GameState get(int id) {
-        return null;
+        try(Connection conn = dataSource.getConnection()) {
+            String sqlPlayerDao = "SELECT * FROM player WHERE id = ?";
+
+            String sql = "SELECT * FROM game_state WHERE id = ?";
+            PreparedStatement ps = conn.prepareStatement(sql);
+            ps.setInt(1,id);
+
+            ResultSet rs = ps.executeQuery();
+
+            PreparedStatement playerStatement = conn.prepareStatement(sqlPlayerDao);
+            playerStatement.setInt(1, rs.getInt(3));
+
+            if(!rs.next()) {
+                return null;
+            }
+
+            ResultSet playerResult = playerStatement.executeQuery();
+            playerResult.next();
+
+            JSONParser parser = new JSONParser();
+            JSONObject json = (JSONObject) parser.parse(playerResult.getString("inventory"));
+
+
+            Gson gson = new Gson();
+            GameState gameState =  new GameState(rs.getDate(2),new PlayerModel(playerResult.getInt(1),playerResult.getString(2),playerResult.getInt(3),playerResult.getInt(4),playerResult.getInt(5),playerResult.getInt(6),playerResult.getInt(7),playerResult.getInt(8), gson.fromJson(String.valueOf(json), Inventory.class)));
+            gameState.setId(rs.getInt(1));
+            return gameState;
+        }
+        catch (SQLException | ParseException throwable) {
+            throw new RuntimeException("Error while updating the Author.", throwable);
+        }
     }
 
     @Override
