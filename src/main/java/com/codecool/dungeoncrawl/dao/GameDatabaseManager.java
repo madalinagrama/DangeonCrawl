@@ -33,6 +33,7 @@ public class GameDatabaseManager {
     private MapDao mapDao;
     private ActorDao actorDao;
     java.sql.Date sqlDate = java.sql.Date.valueOf(LocalDate.now());
+    GameState gmState;
 
     public void setup() throws SQLException {
         DataSource dataSource = connect();
@@ -46,10 +47,10 @@ public class GameDatabaseManager {
         List<PlayerModel> players = playerDao.getAll();
 
         for (PlayerModel playerModel : players) {
-            System.out.println(playerModel.getPlayerName());
             if (playerModel.getPlayerName().equals(name)) {
                 ConfirmName.display("Confirm Save", "Would you like to overwrite the already existing state?", main, name);
                 if (ConfirmName.getData()) {
+//                    System.out.println(map.getMapString());
                     update(player, map, name);
                     return;
                 } else {
@@ -58,8 +59,8 @@ public class GameDatabaseManager {
             }
         }
 
-        Gson gson = new Gson();
-        String json = gson.toJson(player.getInventory());
+//        Gson gson = new Gson();
+//        String json = gson.toJson(player.getInventory());
 
 //        Inventory car = gson.fromJson(json, Inventory.class);
 //        System.out.println(json);
@@ -67,12 +68,17 @@ public class GameDatabaseManager {
         PlayerModel model = new PlayerModel(player);
         GameState gameState = new GameState(sqlDate, model);
         MapModel mapModel = new MapModel(map);
-        String mapString = map.getMapString();
+
+//        System.out.println(map.getMapString());
 
         model.setMap_id(player.getMap_id());
         playerDao.add(model);
+        map.getPlayer().setId(model.getId());
+        gameState.addDiscoveredMap(map.getMapString());
+        gmState = saveGameState(gameState);
+//        System.out.println(gmState.getDiscoveredMaps());
         gameStateDao.add(gameState);
-        mapDao.add(mapModel, mapString, model, playerDao);
+        mapDao.add(mapModel, map.getMapString(), model, playerDao);
 
         for (Soldier soldier : map.getSoldiers()) {
             ActorModel actor = new ActorModel(soldier);
@@ -111,7 +117,9 @@ public class GameDatabaseManager {
 
     public void update(Player player, GameMap map, String name) {
         PlayerModel playerUpdateModel = new PlayerModel(player);
-        GameState gameStateUpdateModel = new GameState(sqlDate, playerUpdateModel);
+        GameState gameStateUpdateModel = gmState;
+        gameStateUpdateModel.addDiscoveredMap(map.getMapString());
+        System.out.println(gameStateUpdateModel.getDiscoveredMaps());
         MapModel mapUpdateModel = new MapModel(map);
         playerUpdateModel.setId(playerDao.getByName(name).getId());
         gameStateUpdateModel.setId(playerDao.getByName(name).getId());
@@ -122,18 +130,47 @@ public class GameDatabaseManager {
 
     }
 
+    public GameState saveGameState(GameState gameState) {
+        return gameState;
+    }
 
-
-    public GameMap loadMap(GameMap map) {
-        if (!(map.getPlayer() == null)) {
-            map.setPlayer(null);
-            map = MapLoader.loadSavedMap(mapDao.get(2));
-            PlayerModel pl = playerDao.get(7);
-            Player newPlayer = new Player(map.getCell(pl.getX(), pl.getY()), pl);
+    public GameMap loadMap(GameMap map, String option) {
+            PlayerModel pl = playerDao.get(Integer.parseInt(option));
+            map = MapLoader.loadSavedMap(mapDao.get(Integer.parseInt(option)));
+            Cell cell = new Cell(map, pl.getX(), pl.getY(), CellType.FLOOR);
+            Player newPlayer = new Player(cell, pl);
             map.setPlayer(newPlayer);
             return map;
+    }
+    public String loadPreviousMap(String mapName, int playerId) {
+
+            return gameStateDao.getPreviousMap(playerId,mapName);
+    }
+
+    public String getSavedStates() {
+        int i = 0;
+        StringBuilder stringBuilder = new StringBuilder();
+        List<String> gameStates = gameStateDao.getAll();
+
+        for (String gameState : gameStates) {
+            i++;
+            stringBuilder.append("" + i + " " + gameState);
+            stringBuilder.append("\n");
         }
-        return null;
+        return stringBuilder.toString();
+    }
+
+    public void saveDiscoveredMaps(GameMap map) {
+//        System.out.println(map.e);
+        int mapLength = map.getMapString().length();
+        if (mapLength == 546) {
+//            System.out.println(gmState.getDiscoveredMaps());
+            gameStateDao.addDiscoveredMaps(map.getMapString(),map.getPlayer(),"map1", gmState);
+        } else {
+//            System.out.println(gmState.getDiscoveredMaps());
+            gameStateDao.addDiscoveredMaps(map.getMapString(),map.getPlayer(), "map2",gmState);
+        }
+
     }
 
 

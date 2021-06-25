@@ -79,6 +79,8 @@ public class MapLoader {
         Scanner scanner = new Scanner(ls);
         int width = scanner.nextInt();
         int height = scanner.nextInt();
+        System.out.println(width);
+        System.out.println(height);
 
         scanner.nextLine(); // empty line
 
@@ -167,9 +169,17 @@ public class MapLoader {
 
 
     public static GameMap loadSavedMap(String maps) {
+        int width;
+        int height;
         Scanner scanner = new Scanner(maps);
-        int width = 25;
-        int height = 21;
+
+        if( maps.length() == 546){
+            width = 25;
+            height = 21;
+        }else {
+            width = 48;
+            height = 32;
+        }
 
 //        scanner.nextLine(); // empty line
 
@@ -190,13 +200,8 @@ public class MapLoader {
                             cell.setType(CellType.FLOOR);
                             break;
                         case 's':
-                            cell.setType(CellType.SKELETON);
-                            new Skeleton(cell);
-                            break;
-                        case '@':
                             cell.setType(CellType.FLOOR);
-                            map.setPlayer(new Player(cell));
-                            map.getPlayer().setMap_id(1);
+                            new Skeleton(cell);
                             break;
                         case 'w':
                             cell.setType(CellType.SWORD);
@@ -208,6 +213,9 @@ public class MapLoader {
                             break;
                         case 'd':
                             cell.setType(CellType.CLOSEDOOR);
+                            break;
+                        case 'b':
+                            cell.setType(CellType.BACKDOOR);
                             break;
                         case 'g':
                             cell.setType(CellType.FLOOR);
@@ -222,6 +230,28 @@ public class MapLoader {
                             cell.setType(CellType.FLOOR);
                             Soldier soldier = new Soldier(cell, map);
                             map.getSoldiers().add(soldier);
+                            break;
+                        case 'f':
+                            cell.setType(CellType.PORTAL);
+                            break;
+                        case 'c':
+                            cell.setType(CellType.BOSSDOOR);
+                            break;
+                        case 'l':
+                            cell.setType(CellType.HAMMER);
+                            new Hammer(cell);
+                            break;
+                        case 'a':
+                            cell.setType(CellType.ARMOR);
+                            new Armor(cell);
+                            break;
+                        case 'j':
+                            cell.setType(CellType.FLOOR);
+                            Boss boss = new Boss(cell);
+                            map.setBoss(boss);
+                            break;
+                        case '*':
+                            cell.setType(CellType.WINDOOR);
                             break;
                         default:
                             throw new RuntimeException("Unrecognized character: '" + line.charAt(x) + "'");

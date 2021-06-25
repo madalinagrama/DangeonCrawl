@@ -70,9 +70,7 @@ public class Cell implements Drawable {
             return  '#';
         } else if (cell.getType() == CellType.FLOOR ) {
             if (cell.getActor() != null) {
-                if (cell.getActor() instanceof Player) {
-                    return '@';
-                } else if( cell.getActor() instanceof Soldier) {
+                if( cell.getActor() instanceof Soldier) {
                     return  'v';
                 } else if (cell.getActor() instanceof Ghost) {
                     return 'g';
@@ -90,6 +88,8 @@ public class Cell implements Drawable {
         }else if (cell.getType() == CellType.KEY) {
             return 'k';
         }else if (cell.getType() == CellType.CLOSEDOOR) {
+            return 'd';
+        }else if (cell.getType() == CellType.OPENDOOR) {
             return 'd';
         } else if (cell.getType() == CellType.BACKDOOR) {
             return 'b';

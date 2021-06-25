@@ -2,7 +2,9 @@ DROP TABLE IF EXISTS public.game_state CASCADE ;
 CREATE TABLE public.game_state (
                                    id serial NOT NULL PRIMARY KEY,
                                    saved_at timestamp without time zone DEFAULT CURRENT_TIMESTAMP NOT NULL,
-                                   player_id integer NOT NULL
+                                   player_id integer NOT NULL,
+                                   discovered_maps json
+
 
 );
 

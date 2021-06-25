@@ -6,6 +6,7 @@ import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.logic.actors.Ghost;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.modals.AlertBox;
+import com.codecool.dungeoncrawl.logic.modals.LoadGame;
 import com.codecool.dungeoncrawl.logic.modals.ReplayGame;
 import com.codecool.dungeoncrawl.logic.actors.Soldier;
 import com.codecool.dungeoncrawl.logic.items.Item;
@@ -40,6 +41,7 @@ import java.util.function.Predicate;
 import java.sql.SQLException;
 
 public class Main extends Application {
+    boolean saved = false;
     GameMap map = MapLoader.loadMap("/map.txt");
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
@@ -51,9 +53,8 @@ public class Main extends Application {
     Label armorLabel = new Label();
     Button addItem = new Button("Add Item");
     Button inventory = new Button("Inventory");
-    Button saveGame = new Button("Save game");
+    Button loadGame = new Button("Load Game");
     GameDatabaseManager dbManager;
-    java.sql.Date sqlDate = java.sql.Date.valueOf(LocalDate.now());
 
     public static void main(String[] args) {
         launch(args);
@@ -74,9 +75,14 @@ public class Main extends Application {
         ui.add(armorLabel, 1, 10);
         ui.add(addItem, 0, 15);
         ui.add(inventory, 5, 15);
+        ui.add(loadGame,0,25);
 
         invetoryWindow();
         addItemsToInventory();
+        loadGame.setOnAction(e-> {
+//            System.out.println(dbManager.getSavedStates());
+            LoadGame.display("Load Game",dbManager.getSavedStates(),this);
+        });
 
         BorderPane borderPane = new BorderPane();
 
@@ -129,11 +135,20 @@ public class Main extends Application {
     public void save(String name) {
         map.getPlayer().setName(name);
         dbManager.saveGame(map.getPlayer(),map, name, this);
-        map = dbManager.loadMap(map); // de refacut
+    }
+
+    public void loadGame (String option) {
+        map = dbManager.loadMap(map, option); // de refacut
     }
 
     public void updateGame(String name) {
         dbManager.update(map.getPlayer(),map, name);
+    }
+
+    public void autoSave() {
+        map.getPlayer().setName("Player[No name set]");
+        dbManager.saveGame(map.getPlayer(),map, "Player[No name set]", this);
+        dbManager.saveDiscoveredMaps(map);
     }
 
     public void restart() {
@@ -210,6 +225,8 @@ public class Main extends Application {
         }
 
         if (map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).getType() == CellType.OPENDOOR) {
+            autoSave();
+            if (!saved) {
             Player player = map.getPlayer();
             map = MapLoader.loadMap2("/map2.txt", player);
             Cell cell = new Cell(map, 44, 29, CellType.FLOOR);
@@ -218,9 +235,24 @@ public class Main extends Application {
             canvas = new Canvas(
                     200 * Tiles.TILE_WIDTH,
                     200 * Tiles.TILE_WIDTH);
+            saved = true;
+            } else {
+                System.out.println("Yes");
+                Player player = map.getPlayer();
+                System.out.println(dbManager.loadPreviousMap("map2", player.getId()));
+                map = MapLoader.loadSavedMap(dbManager.loadPreviousMap("map2", player.getId()));
+                Cell cell = new Cell(map, 44, 29, CellType.FLOOR);
+                player.setCell(cell);
+                map.setPlayer(player);
+                canvas = new Canvas(
+                        200 * Tiles.TILE_WIDTH,
+                        200 * Tiles.TILE_WIDTH);
+
+            }
         } else if (map.getCell(map.getPlayer().getX(), map.getPlayer().getY()).getType() == CellType.BACKDOOR) {
+            autoSave();
             Player player = map.getPlayer();
-            map = MapLoader.loadMap("/map.txt");
+            map = MapLoader.loadSavedMap(dbManager.loadPreviousMap("map1", player.getId()));
             Cell cell = new Cell(map, 20, 19, CellType.FLOOR);
             player.setCell(cell);
             map.setPlayer(player);
