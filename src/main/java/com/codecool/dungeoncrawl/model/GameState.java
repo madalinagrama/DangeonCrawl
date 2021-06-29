@@ -23,9 +23,6 @@ public class GameState extends BaseModel {
         this.savedAt = savedAt;
     }
 
-    public int getCurrentMap() {
-        return player.getMap_id();
-    }
 
 
     public HashMap<String, String> getDiscoveredMaps() {
@@ -39,7 +36,6 @@ public class GameState extends BaseModel {
         if (map.length() == 546) {
             discoveredMaps.put("map1",map);
         }else {
-//            System.out.println(discoveredMaps);
             discoveredMaps.put("map2",map);
         }
     }

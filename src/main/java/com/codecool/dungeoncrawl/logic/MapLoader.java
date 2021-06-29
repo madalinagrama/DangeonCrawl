@@ -79,8 +79,7 @@ public class MapLoader {
         Scanner scanner = new Scanner(ls);
         int width = scanner.nextInt();
         int height = scanner.nextInt();
-        System.out.println(width);
-        System.out.println(height);
+
 
         scanner.nextLine(); // empty line
 

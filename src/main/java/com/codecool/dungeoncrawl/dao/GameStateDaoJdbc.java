@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.time.LocalDate;
-import java.time.LocalDate;
 
 public class GameStateDaoJdbc implements GameStateDao {
 
@@ -69,7 +68,6 @@ public class GameStateDaoJdbc implements GameStateDao {
     @Override
     public void update(GameState state) {
         try(Connection conn = dataSource.getConnection()) {
-//            System.out.println(state.getDiscoveredMaps());
             String sql = "UPDATE game_state SET saved_at = ?, player_id = ?, discovered_maps = ?::json WHERE id = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             state.setSavedAt(sqlDate);
@@ -108,14 +106,10 @@ public class GameStateDaoJdbc implements GameStateDao {
             playerResult.next();
 
             JSONParser parser = new JSONParser();
-//            JSONParser parser1 = new JSONParser();
             JSONObject json = (JSONObject) parser.parse(playerResult.getString("inventory"));
-//            JSONObject json1 = (JSONObject) parser.parse(rs.getString("discovered_maps"));
 
             GameState gameState =  new GameState(rs.getDate(2),new PlayerModel(playerResult.getInt(1),playerResult.getString(2),playerResult.getInt(3),playerResult.getInt(4),playerResult.getInt(5),playerResult.getInt(6),playerResult.getInt(7),playerResult.getInt(8), gson.fromJson(String.valueOf(json), Inventory.class)));
             gameState.setId(rs.getInt(1));
-//            System.out.println(json1);
-//            gameState.setDiscoveredMaps(gson.fromJson(String.valueOf(json1), HashMap.class));
             return gameState;
         }
         catch (SQLException | ParseException throwable) {
@@ -135,7 +129,6 @@ public class GameStateDaoJdbc implements GameStateDao {
             if(!rs.next()) {
                 return null;
             }
-//            System.out.println(rs.getString("discovered_maps"));
 
             JSONParser parser = new JSONParser();
             JSONObject json = (JSONObject) parser.parse(rs.getString("discovered_maps"));

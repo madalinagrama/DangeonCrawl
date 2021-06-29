@@ -1,27 +1,17 @@
 package com.codecool.dungeoncrawl.dao;
 
-import com.codecool.dungeoncrawl.logic.CellType;
-import com.codecool.dungeoncrawl.logic.GameMap;
-import com.codecool.dungeoncrawl.logic.Inventory;
 import com.codecool.dungeoncrawl.model.MapModel;
 import com.codecool.dungeoncrawl.model.PlayerModel;
-import com.google.gson.Gson;
-import org.json.simple.JSONObject;
-import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 import javax.sql.DataSource;
 import java.sql.*;
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class MapDaoJdbc implements MapDao{
     private DataSource dataSource;
     private GameStateDao gameStateDao;
     private PlayerDao playerDao;
 
-    Gson gson = new Gson();
 
     public MapDaoJdbc(DataSource dataSource, GameStateDao gameState, PlayerDao playerDao) {
         this.dataSource = dataSource;
@@ -35,18 +25,15 @@ public class MapDaoJdbc implements MapDao{
 
             String getData = "SELECT id FROM game_state WHERE player_id = ?";
             PreparedStatement ps  = conn.prepareStatement(getData);
-//            System.out.println(playerModel.getId());
             ps.setInt(1,playerModel.getId());
 
             ResultSet rs = ps.executeQuery();
 
             if(!rs.next()) {
-//                System.out.println("empty");
                 return;
             }
 
             int game_state_id = rs.getInt(1);
-//            System.out.println(game_state_id);
 
             PreparedStatement statement = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, "map1");

@@ -1,7 +1,6 @@
 package com.codecool.dungeoncrawl.dao;
 
 import com.codecool.dungeoncrawl.logic.Inventory;
-import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.model.PlayerModel;
 import com.google.gson.Gson;
 import org.json.simple.JSONObject;
@@ -84,13 +83,6 @@ public class PlayerDaoJdbc implements PlayerDao {
 
             JSONParser parser = new JSONParser();
             JSONObject json = (JSONObject) parser.parse(rs.getString("inventory"));
-//            System.out.println(json);
-//            System.out.println(String.valueOf(json));
-//            System.out.println(rs.getString(9));
-//            System.out.println(gson.fromJson(String.valueOf(json), Inventory.class));
-//            System.out.println(gson.fromJson(String.valueOf(json), Inventory.class).getInventory().keySet());
-//            System.out.println(gson.fromJson(String.valueOf(json), Inventory.class).getInventory().values());
-//            System.out.println(gson.fromJson(String.valueOf(json), Inventory.class).getInventory().toString());
             return new PlayerModel(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getInt(4),rs.getInt(5),rs.getInt(6),rs.getInt(7),rs.getInt(8), gson.fromJson(String.valueOf(json), Inventory.class));
 
         }
@@ -104,24 +96,15 @@ public class PlayerDaoJdbc implements PlayerDao {
             String sql = "SELECT * FROM player WHERE player_name = ?";
             PreparedStatement ps = conn.prepareStatement(sql);
             ps.setString(1,name);
-//            System.out.println(name);
 
             ResultSet rs = ps.executeQuery();
 
             if(!rs.next()) {
                 return null;
             }
-//            System.out.println(rs.getString(name));
 
             JSONParser parser = new JSONParser();
             JSONObject json = (JSONObject) parser.parse(rs.getString("inventory"));
-//            System.out.println(json);
-//            System.out.println(String.valueOf(json));
-//            System.out.println(rs.getString(9));
-//            System.out.println(gson.fromJson(String.valueOf(json), Inventory.class));
-//            System.out.println(gson.fromJson(String.valueOf(json), Inventory.class).getInventory().keySet());
-//            System.out.println(gson.fromJson(String.valueOf(json), Inventory.class).getInventory().values());
-//            System.out.println(gson.fromJson(String.valueOf(json), Inventory.class).getInventory().toString());
             return new PlayerModel(rs.getInt(1),rs.getString(2),rs.getInt(3),rs.getInt(4),rs.getInt(5),rs.getInt(6),rs.getInt(7),rs.getInt(8), gson.fromJson(String.valueOf(json), Inventory.class));
 
         }

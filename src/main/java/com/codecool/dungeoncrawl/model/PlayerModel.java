@@ -2,7 +2,6 @@ package com.codecool.dungeoncrawl.model;
 
 import com.codecool.dungeoncrawl.logic.Inventory;
 import com.codecool.dungeoncrawl.logic.actors.Player;
-import com.google.gson.Gson;
 
 public class PlayerModel extends BaseModel {
     private String playerName;
@@ -43,33 +42,21 @@ public class PlayerModel extends BaseModel {
         return playerName;
     }
 
-    public void setPlayerName(String playerName) {
-        this.playerName = playerName;
-    }
 
     public int getHp() {
         return hp;
     }
 
-    public void setHp(int hp) {
-        this.hp = hp;
-    }
 
     public int getX() {
         return x;
     }
 
-    public void setX(int x) {
-        this.x = x;
-    }
 
     public int getY() {
         return y;
     }
 
-    public void setY(int y) {
-        this.y = y;
-    }
 
     public int getMap_id() {
         return map_id;

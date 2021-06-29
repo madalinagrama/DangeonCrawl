@@ -31,6 +31,7 @@ public class LoadGame {
         Button loadGame = new Button("Load Game");
         loadGame.setOnAction( e -> {
             String option = String.valueOf(Arrays.stream(listView.getSelectionModel().getSelectedItem().split("^")).findFirst().get().charAt(0));
+            System.out.println(option);
             main.loadGame(option);
             window.close();
         });

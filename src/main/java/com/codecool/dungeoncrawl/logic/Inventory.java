@@ -25,7 +25,6 @@ public class Inventory {
             inventory.put(itemName, count);
         }
     }
-
     public Map<String, Integer> getInventory() {
         return inventory;
     }

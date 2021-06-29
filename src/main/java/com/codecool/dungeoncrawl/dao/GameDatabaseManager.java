@@ -5,23 +5,17 @@ import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.logic.actors.Ghost;
 import com.codecool.dungeoncrawl.logic.actors.Player;
 import com.codecool.dungeoncrawl.logic.actors.Soldier;
-import com.codecool.dungeoncrawl.logic.items.Sword;
 import com.codecool.dungeoncrawl.logic.modals.ConfirmName;
 import com.codecool.dungeoncrawl.model.ActorModel;
 import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.MapModel;
 import com.codecool.dungeoncrawl.model.PlayerModel;
-import com.google.gson.Gson;
 import org.postgresql.ds.PGSimpleDataSource;
 
 import javax.sql.DataSource;
-import javax.xml.namespace.QName;
 import java.sql.SQLException;
-import java.time.Instant;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import io.github.cdimascio.dotenv.Dotenv;
 
@@ -50,7 +44,6 @@ public class GameDatabaseManager {
             if (playerModel.getPlayerName().equals(name)) {
                 ConfirmName.display("Confirm Save", "Would you like to overwrite the already existing state?", main, name);
                 if (ConfirmName.getData()) {
-//                    System.out.println(map.getMapString());
                     update(player, map, name);
                     return;
                 } else {
@@ -59,24 +52,16 @@ public class GameDatabaseManager {
             }
         }
 
-//        Gson gson = new Gson();
-//        String json = gson.toJson(player.getInventory());
-
-//        Inventory car = gson.fromJson(json, Inventory.class);
-//        System.out.println(json);
-
         PlayerModel model = new PlayerModel(player);
         GameState gameState = new GameState(sqlDate, model);
         MapModel mapModel = new MapModel(map);
 
-//        System.out.println(map.getMapString());
 
         model.setMap_id(player.getMap_id());
         playerDao.add(model);
         map.getPlayer().setId(model.getId());
         gameState.addDiscoveredMap(map.getMapString());
         gmState = saveGameState(gameState);
-//        System.out.println(gmState.getDiscoveredMaps());
         gameStateDao.add(gameState);
         mapDao.add(mapModel, map.getMapString(), model, playerDao);
 
@@ -90,36 +75,12 @@ public class GameDatabaseManager {
             actor.setMap_id(model.getMap_id());
             actorDao.add(actor);
         }
-
-
-//        if(map.getName().equals("map2")) {
-//            ActorModel actor = new ActorModel(map.getBoss());
-//            actor.setMap_id(1);// de reviziut cu id-ul hartii
-//            actorDao.add(actor);
-//        }
-
-//
-//        PlayerModel pl = playerDao.get(1);
-//
-//        System.out.println(pl.getInventory().getInventory());
-//        pl.getInventory().addItem(pl.getInventory().getInventory(),new Sword(map.getCell(10,12)),"sword",1);
-//        System.out.println(pl.getId());
-//        System.out.println(pl.getInventory().getInventory());
-//
-//        System.out.println(pl.getInventory().getInventory());
-//
-//        map.setPlayer(null);
-//        map = MapLoader.loadSavedMap(mapDao.get(2));
-//        pl = playerDao.get(2);
-//        Player newPlayer = new Player(map.getCell(pl.getX(),pl.getY()), pl);
-//        map.setPlayer(newPlayer);
     }
 
     public void update(Player player, GameMap map, String name) {
         PlayerModel playerUpdateModel = new PlayerModel(player);
         GameState gameStateUpdateModel = gmState;
         gameStateUpdateModel.addDiscoveredMap(map.getMapString());
-        System.out.println(gameStateUpdateModel.getDiscoveredMaps());
         MapModel mapUpdateModel = new MapModel(map);
         playerUpdateModel.setId(playerDao.getByName(name).getId());
         gameStateUpdateModel.setId(playerDao.getByName(name).getId());
@@ -161,13 +122,10 @@ public class GameDatabaseManager {
     }
 
     public void saveDiscoveredMaps(GameMap map) {
-//        System.out.println(map.e);
         int mapLength = map.getMapString().length();
         if (mapLength == 546) {
-//            System.out.println(gmState.getDiscoveredMaps());
             gameStateDao.addDiscoveredMaps(map.getMapString(),map.getPlayer(),"map1", gmState);
         } else {
-//            System.out.println(gmState.getDiscoveredMaps());
             gameStateDao.addDiscoveredMaps(map.getMapString(),map.getPlayer(), "map2",gmState);
         }
 

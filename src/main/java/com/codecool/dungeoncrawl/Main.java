@@ -5,9 +5,7 @@ import com.codecool.dungeoncrawl.dao.PlayerDaoJdbc;
 import com.codecool.dungeoncrawl.logic.*;
 import com.codecool.dungeoncrawl.logic.actors.Ghost;
 import com.codecool.dungeoncrawl.logic.actors.Player;
-import com.codecool.dungeoncrawl.logic.modals.AlertBox;
-import com.codecool.dungeoncrawl.logic.modals.LoadGame;
-import com.codecool.dungeoncrawl.logic.modals.ReplayGame;
+import com.codecool.dungeoncrawl.logic.modals.*;
 import com.codecool.dungeoncrawl.logic.actors.Soldier;
 import com.codecool.dungeoncrawl.logic.items.Item;
 import com.codecool.dungeoncrawl.dao.GameDatabaseManager;
@@ -15,7 +13,6 @@ import com.codecool.dungeoncrawl.logic.Cell;
 import com.codecool.dungeoncrawl.logic.GameMap;
 import com.codecool.dungeoncrawl.logic.MapLoader;
 import com.codecool.dungeoncrawl.logic.items.ItemWithEffect;
-import com.codecool.dungeoncrawl.logic.modals.SaveGame;
 import com.codecool.dungeoncrawl.model.GameState;
 import com.codecool.dungeoncrawl.model.MapModel;
 import com.codecool.dungeoncrawl.model.PlayerModel;
@@ -39,9 +36,10 @@ import java.time.LocalDate;
 import java.util.function.Predicate;
 
 import java.sql.SQLException;
-
+//DE FACUT SETAT NUME PLAYER LA INCEPUT
 public class Main extends Application {
     boolean saved = false;
+    String name = SetName.display("Set Name", "Please set a name!");
     GameMap map = MapLoader.loadMap("/map.txt");
     Canvas canvas = new Canvas(
             map.getWidth() * Tiles.TILE_WIDTH,
@@ -56,9 +54,11 @@ public class Main extends Application {
     Button loadGame = new Button("Load Game");
     GameDatabaseManager dbManager;
 
+
     public static void main(String[] args) {
         launch(args);
     }
+
 
     @Override
     public void start(Stage primaryStage) throws Exception {
@@ -75,13 +75,12 @@ public class Main extends Application {
         ui.add(armorLabel, 1, 10);
         ui.add(addItem, 0, 15);
         ui.add(inventory, 5, 15);
-        ui.add(loadGame,0,25);
+        ui.add(loadGame, 0, 25);
 
         invetoryWindow();
         addItemsToInventory();
-        loadGame.setOnAction(e-> {
-//            System.out.println(dbManager.getSavedStates());
-            LoadGame.display("Load Game",dbManager.getSavedStates(),this);
+        loadGame.setOnAction(e -> {
+            LoadGame.display("Load Game", dbManager.getSavedStates(), this);
         });
 
         BorderPane borderPane = new BorderPane();
@@ -94,6 +93,7 @@ public class Main extends Application {
 
         Cell cell = new Cell(map, 6, 15, CellType.FLOOR);
         Player player = new Player(cell);
+        player.setName(name);
         player.setCell(cell);
         map.setPlayer(player);
 
@@ -103,8 +103,8 @@ public class Main extends Application {
 
         primaryStage.setTitle("Dungeon Crawl");
         primaryStage.show();
-
     }
+
 
 
     public void invetoryWindow() {
@@ -146,8 +146,7 @@ public class Main extends Application {
     }
 
     public void autoSave() {
-        map.getPlayer().setName("Player[No name set]");
-        dbManager.saveGame(map.getPlayer(),map, "Player[No name set]", this);
+        dbManager.saveGame(map.getPlayer(),map, map.getPlayer().getName(), this);
         dbManager.saveDiscoveredMaps(map);
     }
 
@@ -156,6 +155,7 @@ public class Main extends Application {
         map = MapLoader.loadMap("/map.txt");
         Cell cell = new Cell(map, 5, 14, CellType.FLOOR);
         Player player = new Player(cell);
+        player.setName(name);
         player.setCell(cell);
         map.setPlayer(player);
     }
@@ -237,9 +237,7 @@ public class Main extends Application {
                     200 * Tiles.TILE_WIDTH);
             saved = true;
             } else {
-                System.out.println("Yes");
                 Player player = map.getPlayer();
-                System.out.println(dbManager.loadPreviousMap("map2", player.getId()));
                 map = MapLoader.loadSavedMap(dbManager.loadPreviousMap("map2", player.getId()));
                 Cell cell = new Cell(map, 44, 29, CellType.FLOOR);
                 player.setCell(cell);
@@ -336,6 +334,7 @@ public class Main extends Application {
         }
         System.exit(0);
     }
+
 
 
 }
