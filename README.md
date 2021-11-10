@@ -1,5 +1,7 @@
 # Dungeon Crawl (sprint 2)
 
+![dungeon_crawl](dungeon_crawl.png "Dungeon Crawl")
+
 ## Story
 
 Last week you created a pretty good [Roguelike](https://en.wikipedia.org/wiki/Roguelike) game. It already has some features but the players have no opportunity to save their games. It can be annoying especially when you have to leave the game aside suddenly.
